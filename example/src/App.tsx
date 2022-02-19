@@ -1,31 +1,80 @@
 import * as React from 'react';
-
-import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'react-native-chatty';
+import { useRef } from 'react';
+//@ts-ignore
+import { Chatty } from 'react-native-chatty';
+import {
+  initialWindowMetrics,
+  SafeAreaProvider,
+} from 'react-native-safe-area-context';
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
+  const listRef = useRef(null);
+  const message = useRef<string>('');
+  const [messages] = React.useState([
+    {
+      id: 1,
+      text: 'Hello',
+      me: true,
+      createdAt: new Date(),
+      user: {
+        id: 1,
+        username: 'John Doe',
+        avatar: { uri: 'https://i.pravatar.cc/300' },
+      },
+    },
+    {
+      id: 2,
+      text: 'Hello',
+      me: false,
+      createdAt: new Date(),
+      user: {
+        id: 2,
+        username: 'Jane Doe',
+        avatar: { uri: 'https://i.pravatar.cc/300' },
+      },
+    },
+  ]);
 
-  React.useEffect(() => {
-    multiply(3, 7).then(setResult);
+  const onPressSend = React.useCallback(
+    (message) => {
+      //@ts-ignore
+      listRef.current.appendMessage({
+        id: messages.length + 1,
+        text: message,
+        me: Math.floor(Math.random() * 2) === 0,
+        createdAt: new Date(),
+        user: {
+          id: messages.length + 1,
+          name: 'John Doe',
+          avatar: { uri: 'https://i.pravatar.cc/300' },
+        },
+      });
+    },
+    [messages]
+  );
+
+  const onChangeText = React.useCallback((text) => {
+    message.current = text;
+    console.warn(text);
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text>Result: {result}</Text>
-    </View>
+    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+      <Chatty
+        messages={messages}
+        ref={listRef}
+        footerProps={{
+          onPressSend: onPressSend,
+          onChangeText: onChangeText,
+        }}
+        headerProps={{
+          user: {
+            id: 0,
+            username: 'John Doe',
+            avatar: { uri: 'https://i.pravatar.cc/300' },
+          },
+        }}
+      />
+    </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
-  },
-});
