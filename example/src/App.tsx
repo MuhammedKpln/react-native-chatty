@@ -71,6 +71,10 @@ export default function App() {
         <Chatty
           messages={messages}
           ref={listRef}
+          loadEarlierProps={{
+            onLoadEarlier: () =>
+              new Promise((resolve) => setTimeout(resolve, 1000)),
+          }}
           closeReplyButton={(props) => (
             <Button title="ok" onPress={props.onPressCancelReply} />
           )}

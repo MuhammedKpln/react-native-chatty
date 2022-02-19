@@ -1,3 +1,4 @@
+import type { TextStyle } from 'react-native';
 import type { ViewStyle } from 'react-native';
 import type { ImageSourcePropType } from 'react-native';
 
@@ -20,7 +21,8 @@ export interface IChatty {
   headerProps: IChatHeaderProps;
   footerProps: IFooterProps;
   replyingTo?: IMessage;
-  bubbleProps: IChatBubble;
+  bubbleProps?: IChatBubble;
+  loadEarlierProps?: ILoadEarlierProps;
   onReply?: (message: IMessage) => void;
   closeReplyButton?: (props?: IFooterProps) => JSX.Element;
   renderFooter?: (props?: IFooterProps) => JSX.Element;
@@ -64,4 +66,10 @@ export interface ListRef {
 
 export interface IReply {
   message: IMessage;
+}
+
+export interface ILoadEarlierProps {
+  onLoadEarlier?: () => Promise<unknown>;
+  buttonContainerStyle?: ViewStyle;
+  labelStyle?: TextStyle;
 }

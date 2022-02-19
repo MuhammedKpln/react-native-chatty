@@ -41,7 +41,6 @@ export const Chatty = React.forwardRef(
             })}
             keyboardVerticalOffset={80}
           >
-            {/* @ts-ignore */}
             <List
               data={messages}
               ref={ref}

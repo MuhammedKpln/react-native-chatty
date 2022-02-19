@@ -1,14 +1,14 @@
 import type { ForwardedRef } from 'react';
 import React, {
   useCallback,
+  useContext,
   useEffect,
   useImperativeHandle,
   useMemo,
   useRef,
   useState,
 } from 'react';
-import { useContext } from 'react';
-import { Text, useWindowDimensions, View } from 'react-native';
+import { ScrollView, Text, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   DataProvider,
@@ -17,6 +17,7 @@ import {
 } from 'recyclerlistview';
 import { ChatBubble } from './ChatBubble';
 import { PropsContext } from './Chatty';
+import { LoadEarlier } from './components/LoadEarlier';
 import { SwipeableBubble } from './SwipeableBubble';
 import type { IListProps, IMessage, ListRef } from './types/Chatty.types';
 import { loadAnimated } from './utils/animated';
@@ -25,6 +26,22 @@ import { wait } from './utils/wait';
 import { AnimatedWrapper } from './wrappers/AnimatedWrapper';
 
 const { FadeInDown } = loadAnimated();
+
+const ScrollViewWithHeader = React.forwardRef(({ children, ...props }, ref) => {
+  const context = useContext(PropsContext);
+
+  return (
+    <ScrollView ref={ref as any} {...props}>
+      {context?.loadEarlierProps && (
+        <LoadEarlier
+          onLoadEarlier={context?.loadEarlierProps?.onLoadEarlier}
+          {...context.loadEarlierProps}
+        />
+      )}
+      {children}
+    </ScrollView>
+  );
+});
 
 export const List = React.forwardRef(
   (props: IListProps, ref: ForwardedRef<ListRef>) => {
@@ -151,12 +168,13 @@ export const List = React.forwardRef(
         <RecyclerListView
           renderAheadOffset={1000}
           layoutProvider={layoutProvider()}
+          externalScrollView={ScrollViewWithHeader as any}
           dataProvider={messages}
           style={{
             height: propsContext.replyingTo ? '90%' : '100%',
           }}
           // @ts-ignore
-          ref={ref}
+          ref={recyclerlistviewRef}
           optimizeForInsertDeleteAnimations
           rowRenderer={rowRenderer}
           renderFooter={() => (isTyping ? renderFooter() : null)}
