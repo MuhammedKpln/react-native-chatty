@@ -1,3 +1,4 @@
+import type { ViewStyle } from 'react-native';
 import type { ImageSourcePropType } from 'react-native';
 
 export interface IUser {
@@ -19,6 +20,7 @@ export interface IChatty {
   headerProps: IChatHeaderProps;
   footerProps: IFooterProps;
   replyingTo?: IMessage;
+  bubbleProps: IChatBubble;
   onReply?: (message: IMessage) => void;
   closeReplyButton?: (props?: IFooterProps) => JSX.Element;
   renderFooter?: (props?: IFooterProps) => JSX.Element;
@@ -34,6 +36,9 @@ export interface IListProps {
 export interface IChatBubble {
   message?: IMessage;
   customContent?: JSX.Element;
+  containerStyle?: ViewStyle;
+  selfBubbleColor?: string;
+  otherBubbleColor?: string;
 }
 
 export interface ISwipeableBubble
