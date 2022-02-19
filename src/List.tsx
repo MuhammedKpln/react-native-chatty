@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { useWindowDimensions, View } from 'react-native';
+import { Text, useWindowDimensions, View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
@@ -17,11 +17,13 @@ import {
 } from 'recyclerlistview';
 import { ChatBubble } from './ChatBubble';
 import type { IListProps, IMessage, ListRef } from './types/Chatty.types';
+import { loadLottie } from './utils/lottie';
 import { wait } from './utils/wait';
 
 export const List = React.forwardRef(
   (props: IListProps, ref: ForwardedRef<ListRef>) => {
     const recyclerlistviewRef = useRef<RecyclerListView<any, any>>();
+    const [isTyping, setIsTyping] = useState(false);
     const windowDimensions = useWindowDimensions();
     const safeArea = useSafeAreaInsets();
     const listHeight = useMemo(
@@ -57,11 +59,17 @@ export const List = React.forwardRef(
         scrollToEnd: (animated?: boolean) => {
           recyclerlistviewRef.current?.scrollToEnd(animated);
         },
+        setIsTyping: (typing?: boolean) => {
+          if (typing) return setIsTyping(typing);
+
+          setIsTyping((prev) => !prev);
+        },
       }),
       [dataProvider, messages]
     );
 
     useEffect(() => {
+      //Scroll down on new message
       wait(100).then(() => {
         recyclerlistviewRef.current?.scrollToEnd(true);
       });
@@ -104,6 +112,26 @@ export const List = React.forwardRef(
       [rowRendererProp]
     );
 
+    const renderFooter = useCallback(() => {
+      const LottieView = loadLottie();
+
+      if (LottieView) {
+        return (
+          <ChatBubble
+            customContent={
+              <LottieView
+                source={require('./assets/lottie/typing.json')}
+                autoPlay
+                style={{ width: 30 }}
+              />
+            }
+          />
+        );
+      } else {
+        return <Text>Typing...</Text>;
+      }
+    }, []);
+
     return (
       <View style={{ minWidth: 1, minHeight: 1, maxHeight: listHeight }}>
         <RecyclerListView
@@ -114,9 +142,10 @@ export const List = React.forwardRef(
             height: '100%',
           }}
           // @ts-ignore
-          ref={recyclerlistviewRef}
+          ref={ref}
           optimizeForInsertDeleteAnimations
           rowRenderer={rowRenderer}
+          renderFooter={() => (isTyping ? renderFooter() : null)}
         />
       </View>
     );

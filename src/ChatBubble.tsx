@@ -6,29 +6,35 @@ import type { IChatBubble } from './types/Chatty.types';
 import dayjs from 'dayjs';
 
 function _ChatBubble(props: IChatBubble) {
-  const { message } = props;
+  const { message, customContent } = props;
   const createdAt = useMemo(() => {
-    return dayjs(message.createdAt).format('HH:mm');
+    return message && dayjs(message.createdAt).format('HH:mm');
   }, [message]);
 
   return (
     <View
       style={[
         styles.container,
-        message.me
+        message?.me
           ? { backgroundColor: '#afddfa', alignSelf: 'flex-end' }
           : { backgroundColor: '#c8faaf', alignSelf: 'flex-start' },
       ]}
     >
-      <Text>{message.text}</Text>
-      <Text style={styles.date}>{createdAt}</Text>
+      {customContent ? (
+        customContent
+      ) : (
+        <>
+          <Text>{message?.text}</Text>
+          <Text style={styles.date}>{createdAt}</Text>
+        </>
+      )}
     </View>
   );
 }
 
 export const ChatBubble = React.memo(_ChatBubble);
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     margin: 10,
     padding: 15,

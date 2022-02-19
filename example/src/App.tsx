@@ -49,13 +49,17 @@ export default function App() {
           avatar: { uri: 'https://i.pravatar.cc/300' },
         },
       });
+      //@ts-ignore
+
+      listRef.current.setIsTyping(false);
     },
     [messages]
   );
 
   const onChangeText = React.useCallback((text) => {
     message.current = text;
-    console.warn(text);
+    //@ts-ignore
+    listRef.current.setIsTyping(text.length > 0);
   }, []);
 
   return (

@@ -29,7 +29,8 @@ export interface IListProps {
 }
 
 export interface IChatBubble {
-  message: IMessage;
+  message?: IMessage;
+  customContent?: JSX.Element;
 }
 
 export interface IChatHeaderProps {
@@ -44,4 +45,5 @@ export interface IFooterProps {
 export interface ListRef {
   appendMessage: (message: IMessage) => void;
   scrollToEnd: (animated?: boolean) => void;
+  setIsTyping: (isTyping?: boolean) => void;
 }
