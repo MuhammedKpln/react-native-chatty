@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { useRef } from 'react';
+import { Button } from 'react-native';
 //@ts-ignore
 import { Chatty } from 'react-native-chatty';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import {
   initialWindowMetrics,
   SafeAreaProvider,
@@ -10,6 +12,7 @@ import {
 export default function App() {
   const listRef = useRef(null);
   const message = useRef<string>('');
+  const [replying, setReplying] = React.useState(null);
   const [messages] = React.useState([
     {
       id: 1,
@@ -24,7 +27,7 @@ export default function App() {
     },
     {
       id: 2,
-      text: 'Hello',
+      text: 'Hello!!!',
       me: false,
       createdAt: new Date(),
       user: {
@@ -64,21 +67,31 @@ export default function App() {
 
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-      <Chatty
-        messages={messages}
-        ref={listRef}
-        footerProps={{
-          onPressSend: onPressSend,
-          onChangeText: onChangeText,
-        }}
-        headerProps={{
-          user: {
-            id: 0,
-            username: 'John Doe',
-            avatar: { uri: 'https://i.pravatar.cc/300' },
-          },
-        }}
-      />
+      <GestureHandlerRootView>
+        <Chatty
+          messages={messages}
+          ref={listRef}
+          closeReplyButton={(props) => (
+            <Button title="ok" onPress={props.onPressCancelReply} />
+          )}
+          footerProps={{
+            onPressSend: onPressSend,
+            onChangeText: onChangeText,
+            onPressCancelReply: () => setReplying(null),
+          }}
+          onReply={(message) => {
+            setReplying(message);
+          }}
+          replyingTo={replying}
+          headerProps={{
+            user: {
+              id: 0,
+              username: 'John Doe',
+              avatar: { uri: 'https://i.pravatar.cc/300' },
+            },
+          }}
+        />
+      </GestureHandlerRootView>
     </SafeAreaProvider>
   );
 }
