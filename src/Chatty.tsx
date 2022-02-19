@@ -1,11 +1,7 @@
 import type { ForwardedRef } from 'react';
 import React, { useEffect } from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform } from 'react-native';
-import {
-  initialWindowMetrics,
-  SafeAreaProvider,
-  SafeAreaView,
-} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Footer } from './Footer';
 import { Header } from './Header';
 import { List } from './List';
@@ -28,35 +24,33 @@ export const Chatty = React.forwardRef(
     }, [ref]);
 
     return (
-      <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-        <SafeAreaView>
-          {props?.renderHeader ? (
-            props.renderHeader(props.headerProps)
-          ) : (
-            <Header {...props.headerProps} />
-          )}
+      <SafeAreaView>
+        {props?.renderHeader ? (
+          props.renderHeader(props.headerProps)
+        ) : (
+          <Header {...props.headerProps} />
+        )}
 
-          <KeyboardAvoidingView
-            behavior={Platform.select({
-              android: 'height',
-              ios: 'padding',
-            })}
-            keyboardVerticalOffset={80}
-          >
-            {/* @ts-ignore */}
-            <List
-              data={messages}
-              ref={ref}
-              rowRenderer={props?.renderBubble ? props.renderBubble : undefined}
-            />
-            {props?.renderFooter ? (
-              props.renderFooter(props.footerProps)
-            ) : (
-              <Footer {...props.footerProps} />
-            )}
-          </KeyboardAvoidingView>
-        </SafeAreaView>
-      </SafeAreaProvider>
+        <KeyboardAvoidingView
+          behavior={Platform.select({
+            android: 'height',
+            ios: 'padding',
+          })}
+          keyboardVerticalOffset={80}
+        >
+          {/* @ts-ignore */}
+          <List
+            data={messages}
+            ref={ref}
+            rowRenderer={props?.renderBubble ? props.renderBubble : undefined}
+          />
+          {props?.renderFooter ? (
+            props.renderFooter(props.footerProps)
+          ) : (
+            <Footer {...props.footerProps} />
+          )}
+        </KeyboardAvoidingView>
+      </SafeAreaView>
     );
   }
 );
