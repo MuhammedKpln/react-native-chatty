@@ -1,12 +1,16 @@
-import React from 'react';
-import { useCallback } from 'react';
-import { useState } from 'react';
-import { View } from 'react-native';
-import { Button } from 'react-native';
-import { StyleSheet, TextInput } from 'react-native';
+import React, { useCallback, useContext, useState } from 'react';
+import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { PropsContext } from './Chatty';
 import type { IFooterProps } from './types/Chatty.types';
+import { loadAnimated } from './utils/animated';
+import { AnimatedWrapper } from './wrappers/AnimatedWrapper';
+
+const Animated = loadAnimated();
+const FadeInDown = Animated.FadeInDown;
+const FadeOutDown = Animated.FadeOutDown;
 
 function _Footer(props: IFooterProps) {
+  const propsContext = useContext(PropsContext);
   const [message, setMessage] = useState<string>('');
 
   const onChangeText = useCallback(
@@ -24,14 +28,36 @@ function _Footer(props: IFooterProps) {
   }, [message, props]);
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        value={message}
-        onChangeText={onChangeText}
-        style={styles.textInput}
-        placeholder="Type a message..."
-      />
-      <Button title="Send" onPress={onPressSend} color="#0084ff" />
+    <View>
+      {props.replyingTo && (
+        <AnimatedWrapper
+          entering={FadeInDown}
+          exiting={FadeOutDown}
+          style={styles.reply}
+        >
+          <View style={styles.replyBody}>
+            <Text style={styles.replyUsername}>
+              {props.replyingTo.user.username}
+            </Text>
+            <Text>{props.replyingTo.text}</Text>
+          </View>
+          {propsContext.closeReplyButton ? (
+            propsContext.closeReplyButton(props)
+          ) : (
+            <Button title="cancel" onPress={props.onPressCancelReply} />
+          )}
+        </AnimatedWrapper>
+      )}
+
+      <View style={styles.container}>
+        <TextInput
+          value={message}
+          onChangeText={onChangeText}
+          style={styles.textInput}
+          placeholder="Type a message..."
+        />
+        <Button title="Send" onPress={onPressSend} color="#0084ff" />
+      </View>
     </View>
   );
 }
@@ -50,6 +76,19 @@ const styles = StyleSheet.create({
   button: {
     width: '20%',
     backgroundColor: '#fcba03',
+  },
+  reply: {
+    flexDirection: 'row',
+    padding: 10,
+    backgroundColor: '#f5f5f5',
+    borderLeftColor: '#c8faaf',
+    borderLeftWidth: 6,
+  },
+  replyBody: {
+    flex: 1,
+  },
+  replyUsername: {
+    fontWeight: 'bold',
   },
 });
 

@@ -7,8 +7,8 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { useContext } from 'react';
 import { Text, useWindowDimensions, View } from 'react-native';
-import Animated, { FadeInDown } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   DataProvider,
@@ -16,12 +16,19 @@ import {
   RecyclerListView,
 } from 'recyclerlistview';
 import { ChatBubble } from './ChatBubble';
+import { PropsContext } from './Chatty';
+import { SwipeableBubble } from './SwipeableBubble';
 import type { IListProps, IMessage, ListRef } from './types/Chatty.types';
+import { loadAnimated } from './utils/animated';
 import { loadLottie } from './utils/lottie';
 import { wait } from './utils/wait';
+import { AnimatedWrapper } from './wrappers/AnimatedWrapper';
+
+const { FadeInDown } = loadAnimated();
 
 export const List = React.forwardRef(
   (props: IListProps, ref: ForwardedRef<ListRef>) => {
+    const propsContext = useContext(PropsContext);
     const recyclerlistviewRef = useRef<RecyclerListView<any, any>>();
     const [isTyping, setIsTyping] = useState(false);
     const windowDimensions = useWindowDimensions();
@@ -30,7 +37,7 @@ export const List = React.forwardRef(
       () => windowDimensions.height - 150 - safeArea.bottom - safeArea.top,
       [windowDimensions, safeArea]
     );
-    const { rowRenderer: rowRendererProp } = props;
+    const { rowRenderer: rowRendererProp, data } = props;
 
     const dataProvider = useMemo<DataProvider>(() => {
       return new DataProvider((r1: IMessage, r2: IMessage) => {
@@ -45,8 +52,8 @@ export const List = React.forwardRef(
     const [messages, setMessages] = useState<DataProvider>(dataProvider);
 
     useEffect(() => {
-      setMessages(dataProvider.cloneWithRows(props.data));
-    }, [props.data, dataProvider]);
+      setMessages(dataProvider.cloneWithRows(data));
+    }, [data, dataProvider]);
 
     useImperativeHandle(
       ref,
@@ -94,22 +101,29 @@ export const List = React.forwardRef(
         if (type === 0) {
           if (rowRendererProp) {
             return (
-              <Animated.View entering={FadeInDown}>
+              <AnimatedWrapper entering={FadeInDown}>
                 {rowRendererProp(data)}
-              </Animated.View>
+              </AnimatedWrapper>
             );
           }
 
           return (
-            <Animated.View entering={FadeInDown}>
-              <ChatBubble message={data} />
-            </Animated.View>
+            <AnimatedWrapper entering={FadeInDown}>
+              {propsContext.onReply ? (
+                <SwipeableBubble
+                  message={data}
+                  onReply={propsContext.onReply}
+                />
+              ) : (
+                <ChatBubble message={data} />
+              )}
+            </AnimatedWrapper>
           );
         }
 
         return <></>;
       },
-      [rowRendererProp]
+      [rowRendererProp, propsContext.onReply]
     );
 
     const renderFooter = useCallback(() => {
@@ -139,7 +153,7 @@ export const List = React.forwardRef(
           layoutProvider={layoutProvider()}
           dataProvider={messages}
           style={{
-            height: '100%',
+            height: propsContext.replyingTo ? '90%' : '100%',
           }}
           // @ts-ignore
           ref={ref}

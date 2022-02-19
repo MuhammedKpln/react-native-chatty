@@ -18,6 +18,9 @@ export interface IChatty {
   messages: IMessage[];
   headerProps: IChatHeaderProps;
   footerProps: IFooterProps;
+  replyingTo?: IMessage;
+  onReply?: (message: IMessage) => void;
+  closeReplyButton?: (props?: IFooterProps) => JSX.Element;
   renderFooter?: (props?: IFooterProps) => JSX.Element;
   renderHeader?: (props?: IChatHeaderProps) => JSX.Element;
   renderBubble?: (props?: IMessage) => JSX.Element;
@@ -33,17 +36,26 @@ export interface IChatBubble {
   customContent?: JSX.Element;
 }
 
+export interface ISwipeableBubble
+  extends IChatBubble,
+    Pick<IChatty, 'onReply'> {}
+
 export interface IChatHeaderProps {
   user: IUser;
 }
 
-export interface IFooterProps {
+export interface IFooterProps extends Pick<IChatty, 'replyingTo'> {
   onChangeText: (text: string) => void;
   onPressSend: (text: string) => void;
+  onPressCancelReply: () => void;
 }
 
 export interface ListRef {
   appendMessage: (message: IMessage) => void;
   scrollToEnd: (animated?: boolean) => void;
   setIsTyping: (isTyping?: boolean) => void;
+}
+
+export interface IReply {
+  message: IMessage;
 }

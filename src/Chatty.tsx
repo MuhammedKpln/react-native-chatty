@@ -7,6 +7,8 @@ import { Header } from './Header';
 import { List } from './List';
 import type { IChatty, ListRef } from './types/Chatty.types';
 
+export const PropsContext = React.createContext<IChatty>({} as IChatty);
+
 export const Chatty = React.forwardRef(
   (props: IChatty, ref: ForwardedRef<ListRef>) => {
     const { messages } = props;
@@ -25,31 +27,33 @@ export const Chatty = React.forwardRef(
 
     return (
       <SafeAreaView>
-        {props?.renderHeader ? (
-          props.renderHeader(props.headerProps)
-        ) : (
-          <Header {...props.headerProps} />
-        )}
-
-        <KeyboardAvoidingView
-          behavior={Platform.select({
-            android: 'height',
-            ios: 'padding',
-          })}
-          keyboardVerticalOffset={80}
-        >
-          {/* @ts-ignore */}
-          <List
-            data={messages}
-            ref={ref}
-            rowRenderer={props?.renderBubble ? props.renderBubble : undefined}
-          />
-          {props?.renderFooter ? (
-            props.renderFooter(props.footerProps)
+        <PropsContext.Provider value={props}>
+          {props?.renderHeader ? (
+            props.renderHeader(props.headerProps)
           ) : (
-            <Footer {...props.footerProps} />
+            <Header {...props.headerProps} />
           )}
-        </KeyboardAvoidingView>
+
+          <KeyboardAvoidingView
+            behavior={Platform.select({
+              android: 'height',
+              ios: 'padding',
+            })}
+            keyboardVerticalOffset={80}
+          >
+            {/* @ts-ignore */}
+            <List
+              data={messages}
+              ref={ref}
+              rowRenderer={props?.renderBubble ? props.renderBubble : undefined}
+            />
+            {props?.renderFooter ? (
+              props.renderFooter(props.footerProps)
+            ) : (
+              <Footer {...props.footerProps} replyingTo={props.replyingTo} />
+            )}
+          </KeyboardAvoidingView>
+        </PropsContext.Provider>
       </SafeAreaView>
     );
   }
