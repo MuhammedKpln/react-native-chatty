@@ -44,7 +44,11 @@ export const Chatty = React.forwardRef(
             keyboardVerticalOffset={80}
           >
             {/* @ts-ignore */}
-            <List data={messages} ref={ref} />
+            <List
+              data={messages}
+              ref={ref}
+              rowRenderer={props?.renderBubble ? props.renderBubble : undefined}
+            />
             {props?.renderFooter ? (
               props.renderFooter(props.footerProps)
             ) : (

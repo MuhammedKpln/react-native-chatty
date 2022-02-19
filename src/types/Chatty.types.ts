@@ -20,7 +20,7 @@ export interface IChatty {
   footerProps: IFooterProps;
   renderFooter?: (props?: IFooterProps) => JSX.Element;
   renderHeader?: (props?: IChatHeaderProps) => JSX.Element;
-  renderBubble?: (props?: IChatBubble) => JSX.Element;
+  renderBubble?: (props?: IMessage) => JSX.Element;
 }
 
 export interface IListProps {
