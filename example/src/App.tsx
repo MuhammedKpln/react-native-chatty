@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import { Button } from 'react-native';
 //@ts-ignore
 import { Chatty } from 'react-native-chatty';
+import type { IMessage } from 'react-native-chatty/lib/typescript/src/types/Chatty.types';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import {
   initialWindowMetrics,
@@ -13,7 +14,7 @@ import {
 export default function App() {
   const listRef = useRef(null);
   const message = useRef<string>('');
-  const [replying, setReplying] = React.useState(null);
+  const [replying, setReplying] = React.useState<IMessage | null>(null);
   const [messages] = React.useState([
     {
       id: 1,
@@ -162,6 +163,7 @@ export default function App() {
             onPressSend: onPressSend,
             onChangeText: onChangeText,
             onPressCancelReply: () => setReplying(null),
+            value: message.current,
           }}
           onReply={(message) => {
             setReplying(message);
