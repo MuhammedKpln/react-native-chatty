@@ -122,6 +122,10 @@ export const List = React.forwardRef(
 
           const isFirstMessage = index === 0;
 
+          if (currentMessage.repliedTo) {
+            return 2;
+          }
+
           if (
             (!isFirstMessage &&
               dayjs(currentMessage.createdAt).date() !==
@@ -140,6 +144,10 @@ export const List = React.forwardRef(
           }
           if (type === 1) {
             dim.height = 110;
+            dim.width = windowDimensions.width;
+          }
+          if (type === 2) {
+            dim.height = 190;
             dim.width = windowDimensions.width;
           }
         }
@@ -186,6 +194,9 @@ export const List = React.forwardRef(
           return renderBubble(data);
         }
         if (type === 1) {
+          return renderBubble(data, true);
+        }
+        if (type === 2) {
           return renderBubble(data, true);
         }
 

@@ -23,7 +23,10 @@ function _Footer(props: IFooterProps) {
   );
 
   const onPressSend = useCallback(() => {
-    props.onPressSend(message);
+    props.onPressSend({
+      text: message,
+      repliedTo: props.replyingTo,
+    });
     setMessage('');
   }, [message, props]);
 

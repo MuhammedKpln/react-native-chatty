@@ -102,15 +102,26 @@ export default function App() {
         username: 'Jane Doe',
         avatar: { uri: 'https://i.pravatar.cc/300' },
       },
+      repliedTo: {
+        id: 2,
+        text: 'Hello!!qwleqweökqjwelkqjwelkqjwelkqwjekqlwljelkqwjelkq!',
+        me: false,
+        createdAt: dayjs().add(2, 'day').toDate(),
+        user: {
+          id: 2,
+          username: 'Jane Doe',
+          avatar: { uri: 'https://i.pravatar.cc/300' },
+        },
+      },
     },
   ]);
 
   const onPressSend = React.useCallback(
-    (message) => {
+    ({ text, repliedTo }) => {
       //@ts-ignore
       listRef.current.appendMessage({
         id: messages.length + 1,
-        text: message,
+        text,
         me: Math.floor(Math.random() * 2) === 0,
         createdAt: new Date(),
         user: {
@@ -118,10 +129,12 @@ export default function App() {
           name: 'John Doe',
           avatar: { uri: 'https://i.pravatar.cc/300' },
         },
+        repliedTo,
       });
       //@ts-ignore
 
       listRef.current.setIsTyping(false);
+      setReplying(null);
     },
     [messages]
   );
@@ -150,8 +163,8 @@ export default function App() {
             onChangeText: onChangeText,
             onPressCancelReply: () => setReplying(null),
           }}
-          onReply={() => {
-            // setReplying(message);
+          onReply={(message) => {
+            setReplying(message);
           }}
           replyingTo={replying ?? undefined}
           headerProps={{

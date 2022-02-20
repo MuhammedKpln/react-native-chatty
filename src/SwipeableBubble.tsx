@@ -24,7 +24,7 @@ function _SwipeableBubble(props: ISwipeableBubble) {
 
   return (
     <Swipeable
-      renderRightActions={() =>
+      renderLeftActions={() =>
         propsContext?.bubbleProps?.replyDragElement ?? <Text> </Text>
       }
       friction={2}

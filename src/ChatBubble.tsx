@@ -6,6 +6,7 @@ import type { IChatBubble } from './types/Chatty.types';
 import dayjs from 'dayjs';
 import { PropsContext } from './Chatty';
 import type { ViewStyle } from 'react-native';
+import { ReplyingTo } from './components/ReplyingTo';
 
 function _ChatBubble(props: IChatBubble) {
   const { message, customContent } = props;
@@ -35,11 +36,24 @@ function _ChatBubble(props: IChatBubble) {
   ]);
 
   return (
-    <View style={[styles.container, bubbleBackgroundColor]}>
+    <View
+      style={[
+        styles.container,
+        bubbleBackgroundColor,
+        { padding: message?.repliedTo ? 5 : 15 },
+      ]}
+    >
       {customContent ? (
         customContent
       ) : (
         <>
+          {message?.repliedTo && (
+            <ReplyingTo
+              username={message?.repliedTo?.user.username}
+              text={message?.repliedTo.text}
+            />
+          )}
+
           <Text>{message?.text}</Text>
           <Text style={styles.date}>{createdAt}</Text>
         </>
@@ -53,7 +67,6 @@ export const ChatBubble = React.memo(_ChatBubble);
 export const styles = StyleSheet.create({
   container: {
     margin: 10,
-    padding: 15,
     maxWidth: 300,
     borderRadius: 10,
   },

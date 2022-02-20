@@ -12,6 +12,7 @@ export interface IMessage {
   user: IUser;
   me: boolean;
   createdAt: Date;
+  repliedTo?: IMessage;
 }
 
 export interface IChatty {
@@ -54,7 +55,7 @@ export interface IChatHeaderProps {
 
 export interface IFooterProps extends Pick<IChatty, 'replyingTo'> {
   onChangeText: (text: string) => void;
-  onPressSend: (text: string) => void;
+  onPressSend: (data: { text: string; repliedTo?: IMessage }) => void;
   onPressCancelReply: () => void;
 }
 
