@@ -1,6 +1,4 @@
-import type { TextStyle } from 'react-native';
-import type { ViewStyle } from 'react-native';
-import type { ImageSourcePropType } from 'react-native';
+import type { ImageSourcePropType, TextStyle, ViewStyle } from 'react-native';
 
 export interface IUser {
   id: number;
@@ -24,6 +22,7 @@ export interface IChatty {
   bubbleProps?: IChatBubble;
   loadEarlierProps?: ILoadEarlierProps;
   enableHapticFeedback?: boolean;
+  renderDateProps?: Omit<IRenderDateProps, 'date'>;
   onReply?: (message: IMessage) => void;
   closeReplyButton?: (props?: IFooterProps) => JSX.Element;
   renderFooter?: (props?: IFooterProps) => JSX.Element;
@@ -79,4 +78,10 @@ export enum HapticType {
   Light = 'light',
   Medium = 'medium',
   Heavy = 'heavy',
+}
+
+export interface IRenderDateProps {
+  date: Date;
+  containerStyle?: ViewStyle;
+  labelStyle?: TextStyle;
 }

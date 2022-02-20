@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import type { ForwardedRef, Ref } from 'react';
 import React, {
   useCallback,
@@ -18,6 +19,7 @@ import {
 import { ChatBubble } from './ChatBubble';
 import { PropsContext } from './Chatty';
 import { LoadEarlier } from './components/LoadEarlier';
+import { RenderDate } from './components/RenderDate';
 import { useHaptic } from './hooks/useHaptic';
 import { SwipeableBubble } from './SwipeableBubble';
 import {
@@ -114,7 +116,21 @@ export const List = React.forwardRef(
 
     const layoutProvider = useCallback(() => {
       return new LayoutProvider(
-        () => {
+        (index) => {
+          const currentMessage: IMessage = messages.getAllData()[index];
+          const prevMessage: IMessage = messages.getAllData()[index - 1];
+
+          const isFirstMessage = index === 0;
+
+          if (
+            (!isFirstMessage &&
+              dayjs(currentMessage.createdAt).date() !==
+                dayjs(prevMessage.createdAt).date()) ||
+            isFirstMessage
+          ) {
+            return 1;
+          }
+
           return 0;
         },
         (type, dim) => {
@@ -122,22 +138,32 @@ export const List = React.forwardRef(
             dim.height = 85;
             dim.width = windowDimensions.width;
           }
+          if (type === 1) {
+            dim.height = 110;
+            dim.width = windowDimensions.width;
+          }
         }
       );
-    }, [windowDimensions.width]);
+    }, [windowDimensions.width, messages]);
 
-    const rowRenderer = useCallback(
-      (type, data: IMessage) => {
-        if (type === 0) {
-          if (rowRendererProp) {
-            return (
-              <AnimatedWrapper entering={FadeInDown}>
-                {rowRendererProp(data)}
-              </AnimatedWrapper>
-            );
-          }
-
+    const renderBubble = useCallback(
+      (data: IMessage, withDate?: boolean) => {
+        if (rowRendererProp) {
           return (
+            <AnimatedWrapper entering={FadeInDown}>
+              {rowRendererProp(data)}
+            </AnimatedWrapper>
+          );
+        }
+
+        return (
+          <View>
+            {withDate && (
+              <RenderDate
+                date={data.createdAt}
+                {...propsContext.renderDateProps}
+              />
+            )}
             <AnimatedWrapper entering={FadeInDown}>
               {propsContext.onReply ? (
                 <SwipeableBubble
@@ -148,12 +174,24 @@ export const List = React.forwardRef(
                 <ChatBubble message={data} />
               )}
             </AnimatedWrapper>
-          );
+          </View>
+        );
+      },
+      [propsContext.onReply, propsContext.renderDateProps, rowRendererProp]
+    );
+
+    const rowRenderer = useCallback(
+      (type, data: IMessage) => {
+        if (type === 0) {
+          return renderBubble(data);
+        }
+        if (type === 1) {
+          return renderBubble(data, true);
         }
 
-        return <></>;
+        return null;
       },
-      [rowRendererProp, propsContext.onReply]
+      [renderBubble]
     );
 
     const renderFooter = useCallback(() => {
