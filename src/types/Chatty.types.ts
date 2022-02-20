@@ -47,7 +47,9 @@ export interface IChatBubble {
 
 export interface ISwipeableBubble
   extends IChatBubble,
-    Pick<IChatty, 'onReply'> {}
+    Pick<IChatty, 'onReply'> {
+  children?: JSX.Element;
+}
 
 export interface IChatHeaderProps {
   user: IUser;

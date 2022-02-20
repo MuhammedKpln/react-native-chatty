@@ -8,7 +8,7 @@ import { loadGestureHandler } from './utils/gestureHandler';
 const { Swipeable } = loadGestureHandler();
 
 function _SwipeableBubble(props: ISwipeableBubble) {
-  const { onReply, message } = props;
+  const { onReply, message, children } = props;
   const propsContext = useContext(PropsContext);
   const swipeableRef = useRef(null);
 
@@ -19,8 +19,6 @@ function _SwipeableBubble(props: ISwipeableBubble) {
     //@ts-ignore
     swipeableRef.current?.close();
   }, [message, onReply, swipeableRef]);
-
-  if (!message) return null;
 
   return (
     <Swipeable
@@ -33,7 +31,7 @@ function _SwipeableBubble(props: ISwipeableBubble) {
       enableTrackpadTwoFingerGesture
       ref={swipeableRef}
     >
-      <ChatBubble {...props} />
+      {children ?? <ChatBubble {...props} />}
     </Swipeable>
   );
 }
