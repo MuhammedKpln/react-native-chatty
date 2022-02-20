@@ -15,6 +15,18 @@ export interface IMessage {
   repliedTo?: IMessage;
 }
 
+/**
+ * @returns true if the specified tag is surrounded with `{`
+ * and `}` characters.
+ *
+ * @example
+ * Prints "true" for `{@link}` but "false" for `@internal`:
+ * ```ts
+ * console.log(isInlineTag('{@link}'));
+ * console.log(isInlineTag('@internal'));
+ * ```
+ * @see {@link http://example.com/@internal | the @internal tag}
+ */
 export interface IChatty {
   messages: IMessage[];
   headerProps: IChatHeaderProps;
@@ -24,6 +36,7 @@ export interface IChatty {
   loadEarlierProps?: ILoadEarlierProps;
   enableHapticFeedback?: boolean;
   renderDateProps?: Omit<IRenderDateProps, 'date'>;
+  setDateLocale: string | ILocale;
   onReply?: (message: IMessage) => void;
   closeReplyButton?: (props?: IFooterProps) => JSX.Element;
   renderFooter?: (props?: IFooterProps) => JSX.Element;
