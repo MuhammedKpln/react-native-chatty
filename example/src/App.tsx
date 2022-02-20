@@ -69,7 +69,7 @@ export default function App() {
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <GestureHandlerRootView>
         <Chatty
-          enableHapticFeedbackx
+          enableHapticFeedback
           messages={messages}
           ref={listRef}
           loadEarlierProps={{
@@ -77,17 +77,20 @@ export default function App() {
               new Promise((resolve) => setTimeout(resolve, 1000)),
           }}
           closeReplyButton={(props) => (
-            <Button title="ok" onPress={props.onPressCancelReply} />
+            <Button
+              title="ok"
+              onPress={() => props?.onPressCancelReply() ?? null}
+            />
           )}
           footerProps={{
             onPressSend: onPressSend,
             onChangeText: onChangeText,
             onPressCancelReply: () => setReplying(null),
           }}
-          onReply={(message) => {
-            setReplying(message);
+          onReply={() => {
+            // setReplying(message);
           }}
-          replyingTo={replying}
+          replyingTo={replying ?? undefined}
           headerProps={{
             user: {
               id: 0,
