@@ -5002,7 +5002,7 @@ expo-font@~10.0.3, expo-font@~10.0.5:
   dependencies:
     fontfaceobserver "^2.1.0"
 
-expo-haptics@~11.1.0:
+expo-haptics@*, expo-haptics@~11.1.0:
   version "11.1.1"
   resolved "https://registry.yarnpkg.com/expo-haptics/-/expo-haptics-11.1.1.tgz#fdaf253d35433e07415424e4792b1db5cc9b0961"
   integrity sha512-Z1qRr9/lPInLhTtyjFyLqPC4edg1G/qlWCShFXNz5eJHOnotOv8qpIKDOvPYPrG3XsJc8UO8ds2Z3qmBUApEUA==
@@ -5039,7 +5039,7 @@ expo-modules-autolinking@~0.3.4:
     find-up "~5.0.0"
     fs-extra "^9.1.0"
 
-expo-modules-core@0.6.5:
+expo-modules-core@*, expo-modules-core@0.6.5:
   version "0.6.5"
   resolved "https://registry.yarnpkg.com/expo-modules-core/-/expo-modules-core-0.6.5.tgz#39a1b2f00af66e0bd03acb1f86a25bd29e1a95a5"
   integrity sha512-h/9+SJ3m8XkDUV1QrPO8WeXaeRYWLBJrOqhokDyhgWUYSqe6JOuRx1ZkoGq/GmTiwjouRDbXPsXUBiU9HWLYyA==
@@ -9955,6 +9955,15 @@ react-is@^17.0.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
+react-native-chatty@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/react-native-chatty/-/react-native-chatty-0.1.2.tgz#c9af5382952012bf981f3215d5f5f4f82aa337b3"
+  integrity sha512-0tMaevlgJTxv0z71OCr9TZYeuHl9vPA4pEAqNZKQ2UqxgJTZ1W8NOGvLN5Okl3YTCAKICGKdL60VLJJeOeOjow==
+  optionalDependencies:
+    expo-haptics "*"
+    expo-modules-core "*"
+    react-native-haptic-feedback "*"
+
 react-native-codegen@*:
   version "0.0.13"
   resolved "https://registry.yarnpkg.com/react-native-codegen/-/react-native-codegen-0.0.13.tgz#4cc94546fc75a5dbe9350d59c10108f2efe6bc17"
@@ -9991,6 +10000,11 @@ react-native-gradle-plugin@^0.0.3:
   integrity sha512-mvkntuCKpKL26XV54XVBGt2hJWGh6IJc5rjOEXQ/9jd9FNhsbRnqdOjI8XMy1gLvK2X8xwbbpEym+QKunV658g==
   dependencies:
     react-native-codegen "*"
+
+react-native-haptic-feedback@*:
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/react-native-haptic-feedback/-/react-native-haptic-feedback-1.13.0.tgz#e4974fc465a38548be262748e73098dc9dd3a0fb"
+  integrity sha512-g8G5QURitDeC/zRlobDvUXLxKYfMlIM2HQNWJKbHPSu61qfs0djnK4s1NZuQzihkeAO0KJ4AS2XWvKBzUmlXtA==
 
 react-native-reanimated@~2.3.1:
   version "2.3.2"

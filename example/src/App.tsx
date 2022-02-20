@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import * as React from 'react';
 import { useRef } from 'react';
 import { Button } from 'react-native';
@@ -30,6 +31,72 @@ export default function App() {
       text: 'Hello!!!',
       me: false,
       createdAt: new Date(),
+      user: {
+        id: 2,
+        username: 'Jane Doe',
+        avatar: { uri: 'https://i.pravatar.cc/300' },
+      },
+    },
+    {
+      id: 2,
+      text: 'Hello!!!',
+      me: false,
+      createdAt: new Date(),
+      user: {
+        id: 2,
+        username: 'Jane Doe',
+        avatar: { uri: 'https://i.pravatar.cc/300' },
+      },
+    },
+    {
+      id: 2,
+      text: 'Hello!!!',
+      me: false,
+      createdAt: new Date(),
+      user: {
+        id: 2,
+        username: 'Jane Doe',
+        avatar: { uri: 'https://i.pravatar.cc/300' },
+      },
+    },
+    {
+      id: 2,
+      text: 'Hello!!!',
+      me: false,
+      createdAt: dayjs().add(2, 'day').toDate(),
+      user: {
+        id: 2,
+        username: 'Jane Doe',
+        avatar: { uri: 'https://i.pravatar.cc/300' },
+      },
+    },
+    {
+      id: 2,
+      text: 'Hello!!!',
+      me: false,
+      createdAt: dayjs().add(2, 'day').toDate(),
+      user: {
+        id: 2,
+        username: 'Jane Doe',
+        avatar: { uri: 'https://i.pravatar.cc/300' },
+      },
+    },
+    {
+      id: 2,
+      text: 'Hello!!!',
+      me: false,
+      createdAt: dayjs().add(2, 'day').toDate(),
+      user: {
+        id: 2,
+        username: 'Jane Doe',
+        avatar: { uri: 'https://i.pravatar.cc/300' },
+      },
+    },
+    {
+      id: 2,
+      text: 'Hello!!!',
+      me: false,
+      createdAt: dayjs().add(2, 'day').toDate(),
       user: {
         id: 2,
         username: 'Jane Doe',
@@ -72,10 +139,6 @@ export default function App() {
           enableHapticFeedback
           messages={messages}
           ref={listRef}
-          loadEarlierProps={{
-            onLoadEarlier: () =>
-              new Promise((resolve) => setTimeout(resolve, 1000)),
-          }}
           closeReplyButton={(props) => (
             <Button
               title="ok"
