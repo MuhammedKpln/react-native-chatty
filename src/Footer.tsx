@@ -54,7 +54,7 @@ function _Footer(props: IFooterProps) {
 
       <View style={styles.container}>
         <TextInput
-          value={message}
+          value={props.value ?? message}
           onChangeText={onChangeText}
           style={styles.textInput}
           placeholder="Type a message..."
