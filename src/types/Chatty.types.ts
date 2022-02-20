@@ -31,8 +31,8 @@ export interface IChatty {
   renderDateProps?: Omit<IRenderDateProps, 'date'>;
   scrollToBottom?: boolean;
   scrollToBottomProps?: Omit<IScrollToBottomProps, 'onPress'>;
-  setDateLocale: string | ILocale;
-  listProps: Omit<IListProps, 'rowRenderer' | 'data'>;
+  setDateLocale?: string | ILocale;
+  listProps?: Omit<IListProps, 'rowRenderer' | 'data'>;
   onReply?: (message: IMessage) => void;
   closeReplyButton?: (props?: IFooterProps) => JSX.Element;
   renderFooter?: (props?: IFooterProps) => JSX.Element;
