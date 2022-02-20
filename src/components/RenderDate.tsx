@@ -9,7 +9,7 @@ function _RenderDate(props: IRenderDateProps) {
   return (
     <View style={containerStyle ?? styles.container}>
       <Text style={labelStyle ?? styles.label}>
-        {dayjs(date).format('MMM DD, YYYY')}
+        {dayjs(date).format('dddd D MMM')}
       </Text>
     </View>
   );
