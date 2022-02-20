@@ -258,9 +258,12 @@ export const List = React.forwardRef(
           layoutProvider={layoutProvider()}
           externalScrollView={ScrollViewWithHeader}
           dataProvider={messages}
-          style={{
-            height: propsContext.replyingTo ? '90%' : '100%',
-          }}
+          style={[
+            {
+              height: propsContext.replyingTo ? '90%' : '100%',
+            },
+            props.containerStyle,
+          ]}
           // @ts-ignore
           ref={recyclerlistviewRef}
           onScroll={onScroll}

@@ -37,6 +37,7 @@ export const Chatty = React.forwardRef(
             data={messages}
             ref={ref}
             rowRenderer={props?.renderBubble ? props.renderBubble : undefined}
+            {...props.listProps}
           />
           {props?.renderFooter ? (
             props.renderFooter(props.footerProps)
