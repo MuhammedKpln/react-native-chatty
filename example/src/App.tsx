@@ -69,6 +69,7 @@ export default function App() {
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <GestureHandlerRootView>
         <Chatty
+          enableHapticFeedbackx
           messages={messages}
           ref={listRef}
           loadEarlierProps={{
