@@ -1,4 +1,9 @@
-import type { ImageSourcePropType, TextStyle, ViewStyle } from 'react-native';
+import type {
+  ImageSourcePropType,
+  TextStyle,
+  TouchableOpacityProps,
+  ViewStyle,
+} from 'react-native';
 
 export interface IUser {
   id: number;
@@ -36,6 +41,8 @@ export interface IChatty {
   loadEarlierProps?: ILoadEarlierProps;
   enableHapticFeedback?: boolean;
   renderDateProps?: Omit<IRenderDateProps, 'date'>;
+  scrollToBottom?: boolean;
+  scrollToBottomProps?: Omit<IScrollToBottomProps, 'onPress'>;
   setDateLocale: string | ILocale;
   onReply?: (message: IMessage) => void;
   closeReplyButton?: (props?: IFooterProps) => JSX.Element;
@@ -100,4 +107,10 @@ export interface IRenderDateProps {
   date: Date;
   containerStyle?: ViewStyle;
   labelStyle?: TextStyle;
+}
+
+export interface IScrollToBottomProps
+  extends Pick<TouchableOpacityProps, 'onPress'> {
+  containerStyle?: ViewStyle;
+  content?: JSX.Element;
 }

@@ -16,8 +16,10 @@ import {
   LayoutProvider,
   RecyclerListView,
 } from 'recyclerlistview';
+import type { ScrollEvent } from 'recyclerlistview/dist/reactnative/core/scrollcomponent/BaseScrollView';
 import { ChatBubble } from './ChatBubble';
 import { PropsContext } from './Chatty';
+import { FAB, IFabRef } from './components/FAB';
 import { LoadEarlier } from './components/LoadEarlier';
 import { RenderDate } from './components/RenderDate';
 import { useHaptic } from './hooks/useHaptic';
@@ -61,6 +63,7 @@ export const List = React.forwardRef(
     const windowDimensions = useWindowDimensions();
     const safeArea = useSafeAreaInsets();
     const { trigger } = useHaptic();
+    const fabRef = useRef<IFabRef>(null);
     const listHeight = useMemo(
       () => windowDimensions.height - 150 - safeArea.bottom - safeArea.top,
       [windowDimensions, safeArea]
@@ -227,8 +230,29 @@ export const List = React.forwardRef(
       }
     }, []);
 
+    const onScroll = useCallback((e: ScrollEvent) => {
+      if (e.nativeEvent.contentOffset.y <= 0) {
+        fabRef.current?.show();
+      } else {
+        fabRef.current?.hide();
+      }
+    }, []);
+
+    const scrollToBottom = useCallback(() => {
+      recyclerlistviewRef.current?.scrollToEnd(true);
+    }, []);
+
+    useEffect(() => {
+      console.warn('updated');
+    });
+
     return (
       <View style={{ minWidth: 1, minHeight: 1, maxHeight: listHeight }}>
+        <FAB
+          ref={fabRef}
+          onPress={scrollToBottom}
+          {...propsContext.scrollToBottomProps}
+        />
         <RecyclerListView
           renderAheadOffset={1000}
           layoutProvider={layoutProvider()}
@@ -239,6 +263,7 @@ export const List = React.forwardRef(
           }}
           // @ts-ignore
           ref={recyclerlistviewRef}
+          onScroll={onScroll}
           optimizeForInsertDeleteAnimations
           rowRenderer={rowRenderer}
           renderFooter={() => (isTyping ? renderFooter() : null)}
