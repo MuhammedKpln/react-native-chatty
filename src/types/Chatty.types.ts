@@ -23,6 +23,7 @@ export interface IChatty {
   replyingTo?: IMessage;
   bubbleProps?: IChatBubble;
   loadEarlierProps?: ILoadEarlierProps;
+  enableHapticFeedback?: boolean;
   onReply?: (message: IMessage) => void;
   closeReplyButton?: (props?: IFooterProps) => JSX.Element;
   renderFooter?: (props?: IFooterProps) => JSX.Element;
@@ -72,4 +73,10 @@ export interface ILoadEarlierProps {
   onLoadEarlier?: () => Promise<unknown>;
   buttonContainerStyle?: ViewStyle;
   labelStyle?: TextStyle;
+}
+
+export enum HapticType {
+  Light = 'light',
+  Medium = 'medium',
+  Heavy = 'heavy',
 }

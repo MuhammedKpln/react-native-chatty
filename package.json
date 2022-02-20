@@ -75,12 +75,17 @@
     "release-it": "^14.2.2",
     "typescript": "^4.1.3"
   },
+  "optionalDependencies": {
+    "expo-modules-core": "*",
+    "expo-haptics": "*",
+    "react-native-haptic-feedback": "*"
+  },
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
+    "react-native-gesture-handler": "*",
     "react-native-reanimated": "*",
-    "react-native-safe-area-context": "*",
-    "react-native-gesture-handler": "*"
+    "react-native-safe-area-context": "*"
   },
   "jest": {
     "preset": "react-native",

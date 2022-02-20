@@ -1,4 +1,4 @@
-import type { ForwardedRef } from 'react';
+import type { ForwardedRef, Ref } from 'react';
 import React, {
   useCallback,
   useContext,
@@ -18,8 +18,14 @@ import {
 import { ChatBubble } from './ChatBubble';
 import { PropsContext } from './Chatty';
 import { LoadEarlier } from './components/LoadEarlier';
+import { useHaptic } from './hooks/useHaptic';
 import { SwipeableBubble } from './SwipeableBubble';
-import type { IListProps, IMessage, ListRef } from './types/Chatty.types';
+import {
+  HapticType,
+  IListProps,
+  IMessage,
+  ListRef,
+} from './types/Chatty.types';
 import { loadAnimated } from './utils/animated';
 import { loadLottie } from './utils/lottie';
 import { wait } from './utils/wait';
@@ -27,21 +33,23 @@ import { AnimatedWrapper } from './wrappers/AnimatedWrapper';
 
 const { FadeInDown } = loadAnimated();
 
-const ScrollViewWithHeader = React.forwardRef(({ children, ...props }, ref) => {
-  const context = useContext(PropsContext);
+const ScrollViewWithHeader = React.forwardRef(
+  ({ children, ...props }, ref: Ref<ScrollView>) => {
+    const propsContext = useContext(PropsContext);
 
-  return (
-    <ScrollView ref={ref as any} {...props}>
-      {context?.loadEarlierProps && (
-        <LoadEarlier
-          onLoadEarlier={context?.loadEarlierProps?.onLoadEarlier}
-          {...context.loadEarlierProps}
-        />
-      )}
-      {children}
-    </ScrollView>
-  );
-});
+    return (
+      <ScrollView ref={ref} {...props}>
+        {propsContext?.loadEarlierProps && (
+          <LoadEarlier
+            onLoadEarlier={propsContext?.loadEarlierProps?.onLoadEarlier}
+            {...propsContext.loadEarlierProps}
+          />
+        )}
+        {children}
+      </ScrollView>
+    );
+  }
+);
 
 export const List = React.forwardRef(
   (props: IListProps, ref: ForwardedRef<ListRef>) => {
@@ -50,6 +58,7 @@ export const List = React.forwardRef(
     const [isTyping, setIsTyping] = useState(false);
     const windowDimensions = useWindowDimensions();
     const safeArea = useSafeAreaInsets();
+    const { trigger } = useHaptic();
     const listHeight = useMemo(
       () => windowDimensions.height - 150 - safeArea.bottom - safeArea.top,
       [windowDimensions, safeArea]
@@ -79,6 +88,10 @@ export const List = React.forwardRef(
           setMessages(
             dataProvider.cloneWithRows([...messages.getAllData(), message])
           );
+
+          if (!message.me && propsContext?.enableHapticFeedback) {
+            trigger(HapticType.Heavy);
+          }
         },
         scrollToEnd: (animated?: boolean) => {
           recyclerlistviewRef.current?.scrollToEnd(animated);
@@ -89,7 +102,7 @@ export const List = React.forwardRef(
           setIsTyping((prev) => !prev);
         },
       }),
-      [dataProvider, messages]
+      [dataProvider, messages, propsContext.enableHapticFeedback, trigger]
     );
 
     useEffect(() => {
@@ -97,7 +110,7 @@ export const List = React.forwardRef(
       wait(100).then(() => {
         recyclerlistviewRef.current?.scrollToEnd(true);
       });
-    }, [ref, messages]);
+    }, [ref, messages, trigger]);
 
     const layoutProvider = useCallback(() => {
       return new LayoutProvider(
@@ -168,7 +181,7 @@ export const List = React.forwardRef(
         <RecyclerListView
           renderAheadOffset={1000}
           layoutProvider={layoutProvider()}
-          externalScrollView={ScrollViewWithHeader as any}
+          externalScrollView={ScrollViewWithHeader}
           dataProvider={messages}
           style={{
             height: propsContext.replyingTo ? '90%' : '100%',
