@@ -274,7 +274,6 @@ export const List = React.forwardRef(
         )}
 
         <RecyclerListView
-          renderAheadOffset={1000}
           layoutProvider={layoutProvider()}
           externalScrollView={ScrollViewWithHeader}
           dataProvider={messages}
@@ -290,6 +289,8 @@ export const List = React.forwardRef(
           optimizeForInsertDeleteAnimations
           rowRenderer={rowRenderer}
           renderFooter={() => (isTyping ? renderFooter() : null)}
+          onEndReached={props?.onEndReached}
+          onEndReachedThreshold={props?.onEndReachedThreshold}
         />
       </View>
     );

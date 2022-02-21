@@ -4,6 +4,7 @@ import type {
   TouchableOpacityProps,
   ViewStyle,
 } from 'react-native';
+import type { RecyclerListViewProps } from 'recyclerlistview';
 
 export interface IUser {
   id: number;
@@ -40,7 +41,11 @@ export interface IChatty {
   renderBubble?: (props?: IMessage) => JSX.Element;
 }
 
-export interface IListProps {
+export interface IListProps
+  extends Pick<
+    RecyclerListViewProps,
+    'onEndReached' | 'onEndReachedThreshold'
+  > {
   rowRenderer?: (data: IMessage) => JSX.Element;
   data: IMessage[];
   containerStyle?: ViewStyle;
