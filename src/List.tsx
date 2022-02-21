@@ -170,7 +170,7 @@ export const List = React.forwardRef(
               )}
 
               <AnimatedWrapper entering={FadeInDown}>
-                <SwipeableBubble onReply={propsContext.onReply}>
+                <SwipeableBubble message={data} onReply={propsContext.onReply}>
                   {rowRendererProp(data)}
                 </SwipeableBubble>
               </AnimatedWrapper>
