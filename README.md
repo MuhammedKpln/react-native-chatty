@@ -1,21 +1,44 @@
 # react-native-chatty
 
-React native chatty
+Full-featured high performance chat UI for React Native
+
+
+## Features
+- Built with **TypeScript**
+- Using [recyclerlistview](https://github.com/Flipkart/recyclerlistview) for rendering messages
+- Fully customizable components
+- Loading earlier messages support
+- Typing animation using **react-native-lottie** otherways use ur own animation
+- Swipe to reply
+- Scroll to bottom
+- Haptic feedback on new message
+
+
 
 ## Installation
 
 ```sh
-npm install react-native-chatty
+yarn add react-native-chatty
 ```
+#### Optional Dependencies
+
+- react-native-lottie
+- react-native-haptic-feedback / expo-haptics
+
+
 
 ## Usage
 
 ```js
-import { multiply } from "react-native-chatty";
+import { Chatty } from "react-native-chatty";
 
-// ...
 
-const result = await multiply(3, 7);
+<Chatty messages={messages} headerProps={...} footerProps={...} />
+
+// For more information visit
+
+//https://github.com/MuhammedKpln/react-native-chatty/wiki
+
 ```
 
 ## Contributing
