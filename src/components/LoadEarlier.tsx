@@ -9,7 +9,7 @@ function _LoadEarlier(props: ILoadEarlierProps) {
   const [fetchingEarlier, setFetchingEarlier] = useState(false);
 
   const onPress = useCallback(() => {
-    setFetchingEarlier((prev) => !prev);
+    setFetchingEarlier(true);
 
     onLoadEarlier!().finally(() => setFetchingEarlier(false));
   }, [onLoadEarlier]);

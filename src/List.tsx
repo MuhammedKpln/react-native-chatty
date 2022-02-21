@@ -44,12 +44,10 @@ const ScrollViewWithHeader = React.forwardRef(
 
     return (
       <ScrollView ref={ref} {...props}>
-        {propsContext?.loadEarlierProps && (
-          <LoadEarlier
-            onLoadEarlier={propsContext?.loadEarlierProps?.onLoadEarlier}
-            {...propsContext.loadEarlierProps}
-          />
-        )}
+        {propsContext?.loadEarlierProps &&
+          propsContext.loadEarlierProps.show && (
+            <LoadEarlier {...propsContext.loadEarlierProps} />
+          )}
         {children}
       </ScrollView>
     );
@@ -119,11 +117,13 @@ export const List = React.forwardRef(
     );
 
     useEffect(() => {
+      // if (messages.)
+
       //Scroll down on new message
       wait(100).then(() => {
-        recyclerlistviewRef.current?.scrollToEnd(true);
+        // recyclerlistviewRef.current?.scrollToEnd(true);
       });
-    }, [ref, messages, trigger]);
+    }, [ref, messages]);
 
     const layoutProvider = useCallback(() => {
       return new LayoutProvider(
@@ -259,13 +259,20 @@ export const List = React.forwardRef(
       }
     }, [propsContext]);
 
-    const onScroll = useCallback((e: ScrollEvent) => {
-      if (e.nativeEvent.contentOffset.y <= 0) {
-        fabRef.current?.show();
-      } else {
-        fabRef.current?.hide();
-      }
-    }, []);
+    const onScroll = useCallback(
+      (e: ScrollEvent, offsetX: number, offsetY: number) => {
+        if (e.nativeEvent.contentOffset.y <= 0) {
+          fabRef.current?.show();
+        } else {
+          fabRef.current?.hide();
+        }
+
+        if (props.onScroll) {
+          props.onScroll(e, offsetX, offsetY);
+        }
+      },
+      [props]
+    );
 
     const scrollToBottom = useCallback(() => {
       recyclerlistviewRef.current?.scrollToEnd(true);

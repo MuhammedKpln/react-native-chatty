@@ -45,7 +45,7 @@ export interface IChatty {
 export interface IListProps
   extends Pick<
     RecyclerListViewProps,
-    'onEndReached' | 'onEndReachedThreshold'
+    'onEndReached' | 'onEndReachedThreshold' | 'onScroll'
   > {
   rowRenderer?: (data: IMessage) => JSX.Element;
   data: IMessage[];
@@ -90,7 +90,8 @@ export interface IReply {
 }
 
 export interface ILoadEarlierProps {
-  onLoadEarlier?: () => Promise<unknown>;
+  show: boolean;
+  onLoadEarlier: () => Promise<unknown>;
   buttonContainerStyle?: ViewStyle;
   labelStyle?: TextStyle;
 }
