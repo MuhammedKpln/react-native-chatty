@@ -24,6 +24,7 @@ import { FAB, IFabRef } from './components/FAB';
 import { LoadEarlier } from './components/LoadEarlier';
 import { RenderDate } from './components/RenderDate';
 import { useHaptic } from './hooks/useHaptic';
+import { usePrevious } from './hooks/usePrevious';
 import { SwipeableBubble } from './SwipeableBubble';
 import {
   HapticType,
@@ -80,6 +81,7 @@ export const List = React.forwardRef(
     }, []);
 
     const [messages, setMessages] = useState<DataProvider>(dataProvider);
+    const previousMessages = usePrevious<DataProvider>(messages);
 
     useEffect(() => {
       setMessages(dataProvider.cloneWithRows(data));
@@ -117,13 +119,17 @@ export const List = React.forwardRef(
     );
 
     useEffect(() => {
-      // if (messages.)
-
-      //Scroll down on new message
-      wait(100).then(() => {
-        // recyclerlistviewRef.current?.scrollToEnd(true);
-      });
-    }, [ref, messages]);
+      // Checks if first index of messages have same id, if it is then it will not trigger scrolling
+      // This is because the first message is the load earlier message, and we don't want to scroll to the bottom.
+      if (
+        previousMessages &&
+        previousMessages.getAllData()![0]?.id === messages.getAllData()![0]?.id
+      ) {
+        wait(100).then(() => {
+          recyclerlistviewRef.current?.scrollToEnd(true);
+        });
+      }
+    }, [ref, messages, previousMessages]);
 
     const layoutProvider = useCallback(() => {
       return new LayoutProvider(
@@ -278,10 +284,6 @@ export const List = React.forwardRef(
       recyclerlistviewRef.current?.scrollToEnd(true);
     }, []);
 
-    useEffect(() => {
-      console.warn('updated');
-    });
-
     return (
       <View style={{ minWidth: 1, minHeight: 1, maxHeight: listHeight }}>
         {propsContext.showScrollToBottomButton && (
@@ -304,6 +306,9 @@ export const List = React.forwardRef(
           ]}
           // @ts-ignore
           ref={recyclerlistviewRef}
+          scrollViewProps={{
+            keyboardShouldPersistTaps: false,
+          }}
           onScroll={onScroll}
           optimizeForInsertDeleteAnimations
           rowRenderer={rowRenderer}
