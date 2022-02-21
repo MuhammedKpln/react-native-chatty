@@ -81,12 +81,12 @@
     "react-native-haptic-feedback": "*"
   },
   "peerDependencies": {
-    "react": "16.13.1",
-    "react-native": "^0.63.4",
-    "react-native-gesture-handler": "^2.2.0",
-    "react-native-reanimated": "^2.4.1",
-    "react-native-safe-area-context": "^3.4.1",
-    "dayjs": "^1.10.7"
+    "react": "*",
+    "react-native": "*",
+    "react-native-gesture-handler": "*",
+    "react-native-reanimated": "*",
+    "react-native-safe-area-context": "*",
+    "dayjs": "*"
   },
   "jest": {
     "preset": "react-native",
