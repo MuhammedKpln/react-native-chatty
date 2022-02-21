@@ -17,6 +17,20 @@ function _ChatBubble(props: IChatBubble) {
   }, [message]);
 
   const bubbleBackgroundColor = useMemo<ViewStyle>(() => {
+    if (propsContext.bubbleProps?.containerStyle) {
+      if (message?.me) {
+        return {
+          alignSelf: 'flex-end',
+          ...propsContext.bubbleProps.containerStyle,
+        };
+      } else {
+        return {
+          alignSelf: 'flex-start',
+          ...propsContext.bubbleProps.containerStyle,
+        };
+      }
+    }
+
     if (message?.me) {
       return {
         backgroundColor:
@@ -33,11 +47,13 @@ function _ChatBubble(props: IChatBubble) {
     message?.me,
     propsContext?.bubbleProps?.otherBubbleColor,
     propsContext?.bubbleProps?.selfBubbleColor,
+    propsContext.bubbleProps?.containerStyle,
   ]);
 
   return (
     <View
       style={[
+        propsContext.bubbleProps?.containerStyle,
         styles.container,
         bubbleBackgroundColor,
         { padding: message?.repliedTo ? 5 : 15 },
