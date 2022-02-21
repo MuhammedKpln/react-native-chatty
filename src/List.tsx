@@ -161,11 +161,20 @@ export const List = React.forwardRef(
       (data: IMessage, withDate?: boolean) => {
         if (rowRendererProp) {
           return (
-            <AnimatedWrapper entering={FadeInDown}>
-              <SwipeableBubble onReply={propsContext.onReply}>
-                {rowRendererProp(data)}
-              </SwipeableBubble>
-            </AnimatedWrapper>
+            <View>
+              {withDate && (
+                <RenderDate
+                  date={data.createdAt}
+                  {...propsContext.renderDateProps}
+                />
+              )}
+
+              <AnimatedWrapper entering={FadeInDown}>
+                <SwipeableBubble onReply={propsContext.onReply}>
+                  {rowRendererProp(data)}
+                </SwipeableBubble>
+              </AnimatedWrapper>
+            </View>
           );
         }
 
