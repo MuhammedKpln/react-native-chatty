@@ -1,11 +1,12 @@
 # react-native-chatty
 
-Full-featured high performance chat UI for React Native
+💬 Full-featured high performance chat UI for React Native
 
+[Check out Expo snack (For better results, try on real devices.)](https://snack.expo.dev/@muhammedkpln/react-native-chatty-example)
 
 ## Features
 - Built with **TypeScript**
-- Using [recyclerlistview](https://github.com/Flipkart/recyclerlistview) for rendering messages
+- 🚀 Using [recyclerlistview](https://github.com/Flipkart/recyclerlistview) for rendering messages
 - Fully customizable components
 - Loading earlier messages support
 - Typing animation using **react-native-lottie** otherways use ur own animation

@@ -307,7 +307,7 @@ export const List = React.forwardRef(
           // @ts-ignore
           ref={recyclerlistviewRef}
           scrollViewProps={{
-            keyboardShouldPersistTaps: false,
+            keyboardShouldPersistTaps: 'never',
           }}
           onScroll={onScroll}
           optimizeForInsertDeleteAnimations
