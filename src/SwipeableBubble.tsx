@@ -24,6 +24,8 @@ function _SwipeableBubble(props: ISwipeableBubble) {
     return propsContext.bubbleProps?.replyDragElement ?? <Text> </Text>;
   }, [propsContext.bubbleProps?.replyDragElement]);
 
+  if (!onReply) return children ?? <ChatBubble {...props} />;
+
   return (
     <Swipeable
       renderLeftActions={renderLeftActions}
