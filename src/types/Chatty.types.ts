@@ -69,7 +69,7 @@ export interface IFooterProps extends Pick<IChatty, 'replyingTo'> {
   onChangeText: (text: string) => void;
   onPressSend: (data: { text: string; repliedTo?: IMessage }) => void;
   onPressCancelReply: () => void;
-  value: string;
+  value?: string;
 }
 
 export interface ListRef {
