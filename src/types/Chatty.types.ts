@@ -52,7 +52,7 @@ export interface IChatBubble {
   containerStyle?: ViewStyle;
   selfBubbleColor?: string;
   otherBubbleColor?: string;
-  replyDragElement?: () => JSX.Element;
+  replyDragElement?: JSX.Element;
 }
 
 export interface ISwipeableBubble

@@ -20,11 +20,13 @@ function _SwipeableBubble(props: ISwipeableBubble) {
     swipeableRef.current?.close();
   }, [message, onReply, swipeableRef]);
 
+  const renderLeftActions = useCallback(() => {
+    return propsContext.bubbleProps?.replyDragElement ?? <Text> </Text>;
+  }, [propsContext.bubbleProps?.replyDragElement]);
+
   return (
     <Swipeable
-      renderLeftActions={() =>
-        propsContext?.bubbleProps?.replyDragElement ?? <Text> </Text>
-      }
+      renderLeftActions={renderLeftActions}
       friction={2}
       overshootFriction={2}
       onEnded={() => _onReply()}
