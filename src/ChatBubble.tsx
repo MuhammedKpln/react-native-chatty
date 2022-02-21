@@ -1,12 +1,10 @@
-import React, { useContext } from 'react';
-import { useMemo } from 'react';
-import { StyleSheet } from 'react-native';
-import { Text, View } from 'react-native';
-import type { IChatBubble } from './types/Chatty.types';
 import dayjs from 'dayjs';
-import { PropsContext } from './Chatty';
+import React, { useContext, useMemo } from 'react';
 import type { ViewStyle } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { PropsContext } from './Chatty';
 import { ReplyingTo } from './components/ReplyingTo';
+import type { IChatBubble } from './types/Chatty.types';
 
 function _ChatBubble(props: IChatBubble) {
   const { message, customContent } = props;
@@ -20,12 +18,10 @@ function _ChatBubble(props: IChatBubble) {
     if (propsContext.bubbleProps?.containerStyle) {
       if (message?.me) {
         return {
-          alignSelf: 'flex-end',
           ...propsContext.bubbleProps.containerStyle,
         };
       } else {
         return {
-          alignSelf: 'flex-start',
           ...propsContext.bubbleProps.containerStyle,
         };
       }
@@ -35,13 +31,11 @@ function _ChatBubble(props: IChatBubble) {
       return {
         backgroundColor:
           propsContext?.bubbleProps?.selfBubbleColor ?? '#afddfa',
-        alignSelf: 'flex-end',
       };
     }
 
     return {
       backgroundColor: propsContext?.bubbleProps?.otherBubbleColor ?? '#c8faaf',
-      alignSelf: 'flex-start',
     };
   }, [
     message?.me,
@@ -50,29 +44,54 @@ function _ChatBubble(props: IChatBubble) {
     propsContext.bubbleProps?.containerStyle,
   ]);
 
-  return (
-    <View
-      style={[
-        propsContext.bubbleProps?.containerStyle,
-        styles.container,
-        bubbleBackgroundColor,
-        { padding: message?.repliedTo ? 5 : 15 },
-      ]}
-    >
-      {customContent ? (
-        customContent
-      ) : (
-        <>
-          {message?.repliedTo && (
-            <ReplyingTo
-              username={message?.repliedTo?.user.username}
-              text={message?.repliedTo.text}
-            />
-          )}
+  const bubbleAlignment = useMemo<ViewStyle>(() => {
+    if (message?.me) {
+      return {
+        alignSelf: 'flex-end',
+      };
+    }
 
-          <Text>{message?.text}</Text>
-          <Text style={styles.date}>{createdAt}</Text>
+    return {
+      alignSelf: 'flex-start',
+    };
+  }, [message?.me]);
+
+  return (
+    <View style={[styles.wrapper, bubbleAlignment]}>
+      {propsContext.bubbleProps?.trailingAccessory && message?.me && (
+        <View>{propsContext.bubbleProps.trailingAccessory}</View>
+      )}
+
+      <View
+        style={[
+          bubbleBackgroundColor,
+          propsContext.bubbleProps?.containerStyle,
+          styles.container,
+          bubbleBackgroundColor,
+          { padding: message?.repliedTo ? 5 : 15 },
+        ]}
+      >
+        <>
+          {customContent ? (
+            customContent
+          ) : (
+            <>
+              {message?.repliedTo && (
+                <ReplyingTo
+                  username={message?.repliedTo?.user.username}
+                  text={message?.repliedTo.text}
+                />
+              )}
+
+              <Text>{message?.text}</Text>
+              <Text style={styles.date}>{createdAt}</Text>
+            </>
+          )}
         </>
+      </View>
+
+      {propsContext.bubbleProps?.trailingAccessory && !message?.me && (
+        <View>{propsContext.bubbleProps.trailingAccessory}</View>
       )}
     </View>
   );
@@ -81,6 +100,11 @@ function _ChatBubble(props: IChatBubble) {
 export const ChatBubble = React.memo(_ChatBubble);
 
 export const styles = StyleSheet.create({
+  wrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   container: {
     margin: 10,
     maxWidth: 300,
