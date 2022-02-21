@@ -74,6 +74,7 @@ export interface IFooterProps extends Pick<IChatty, 'replyingTo'> {
 
 export interface ListRef {
   appendMessage: (message: IMessage) => void;
+  removeMessage: (id: number) => void;
   scrollToEnd: (animated?: boolean) => void;
   setIsTyping: (isTyping?: boolean) => void;
 }

@@ -10,6 +10,7 @@ import React, {
   useState,
 } from 'react';
 import { ScrollView, Text, useWindowDimensions, View } from 'react-native';
+import { FadeOutUp } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   DataProvider,
@@ -106,6 +107,13 @@ export const List = React.forwardRef(
 
           setIsTyping((prev) => !prev);
         },
+        removeMessage: (id: number) => {
+          setMessages(
+            dataProvider.cloneWithRows(
+              messages.getAllData().filter((message) => message.id !== id)
+            )
+          );
+        },
       }),
       [dataProvider, messages, propsContext.enableHapticFeedback, trigger]
     );
@@ -169,7 +177,7 @@ export const List = React.forwardRef(
                 />
               )}
 
-              <AnimatedWrapper entering={FadeInDown}>
+              <AnimatedWrapper entering={FadeInDown} exiting={FadeOutUp}>
                 <SwipeableBubble message={data} onReply={propsContext.onReply}>
                   {rowRendererProp(data)}
                 </SwipeableBubble>
@@ -186,7 +194,7 @@ export const List = React.forwardRef(
                 {...propsContext.renderDateProps}
               />
             )}
-            <AnimatedWrapper entering={FadeInDown}>
+            <AnimatedWrapper entering={FadeInDown} exiting={FadeOutUp}>
               {propsContext.onReply ? (
                 <SwipeableBubble
                   message={data}
