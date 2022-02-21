@@ -220,13 +220,14 @@ export default function App() {
           renderTypingBubble={(props) => (
             <View>
               <Text>texting babocan</Text>
-
-              {props.typingAnimation}
+              {/* //@ts-ignore */}
+              {props?.typingAnimation}
             </View>
           )}
         />
         <Button
           title="remove message"
+          //@ts-ignore
           onPress={() => listRef?.current?.removeMessage(2)}
         />
       </GestureHandlerRootView>
