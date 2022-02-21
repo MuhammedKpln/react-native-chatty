@@ -231,6 +231,18 @@ export const List = React.forwardRef(
       const LottieView = loadLottie();
 
       if (LottieView) {
+        if (propsContext.renderTypingBubble) {
+          return propsContext.renderTypingBubble({
+            typingAnimation: (
+              <LottieView
+                source={require('./assets/lottie/typing.json')}
+                autoPlay
+                style={{ width: 30 }}
+              />
+            ),
+          });
+        }
+
         return (
           <ChatBubble
             customContent={
@@ -245,7 +257,7 @@ export const List = React.forwardRef(
       } else {
         return <Text>Typing...</Text>;
       }
-    }, []);
+    }, [propsContext]);
 
     const onScroll = useCallback((e: ScrollEvent) => {
       if (e.nativeEvent.contentOffset.y <= 0) {

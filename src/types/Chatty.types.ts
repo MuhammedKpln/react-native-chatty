@@ -39,6 +39,7 @@ export interface IChatty {
   renderFooter?: (props?: IFooterProps) => JSX.Element;
   renderHeader?: (props?: IChatHeaderProps) => JSX.Element;
   renderBubble?: (props?: IMessage) => JSX.Element;
+  renderTypingBubble?: (props?: ITypingBubble) => JSX.Element;
 }
 
 export interface IListProps
@@ -110,4 +111,8 @@ export interface IScrollToBottomProps
   extends Pick<TouchableOpacityProps, 'onPress'> {
   containerStyle?: ViewStyle;
   content?: JSX.Element;
+}
+
+export interface ITypingBubble {
+  typingAnimation?: JSX.Element;
 }
