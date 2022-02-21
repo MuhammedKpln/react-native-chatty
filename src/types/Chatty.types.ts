@@ -25,7 +25,7 @@ export interface IChatty {
   headerProps: IChatHeaderProps;
   footerProps: IFooterProps;
   replyingTo?: IMessage;
-  bubbleProps?: IChatBubble;
+  bubbleProps?: Omit<IChatBubble, 'customContent'>;
   loadEarlierProps?: ILoadEarlierProps;
   enableHapticFeedback?: boolean;
   renderDateProps?: Omit<IRenderDateProps, 'date'>;
