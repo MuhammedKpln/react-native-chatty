@@ -257,11 +257,14 @@ export const List = React.forwardRef(
 
     return (
       <View style={{ minWidth: 1, minHeight: 1, maxHeight: listHeight }}>
-        <FAB
-          ref={fabRef}
-          onPress={scrollToBottom}
-          {...propsContext.scrollToBottomProps}
-        />
+        {propsContext.showScrollToBottomButton && (
+          <FAB
+            ref={fabRef}
+            onPress={scrollToBottom}
+            {...propsContext.scrollToBottomProps}
+          />
+        )}
+
         <RecyclerListView
           renderAheadOffset={1000}
           layoutProvider={layoutProvider()}

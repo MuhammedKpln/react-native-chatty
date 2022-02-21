@@ -29,7 +29,7 @@ export interface IChatty {
   loadEarlierProps?: ILoadEarlierProps;
   enableHapticFeedback?: boolean;
   renderDateProps?: Omit<IRenderDateProps, 'date'>;
-  scrollToBottom?: boolean;
+  showScrollToBottomButton?: boolean;
   scrollToBottomProps?: Omit<IScrollToBottomProps, 'onPress'>;
   setDateLocale?: string | ILocale;
   listProps?: Omit<IListProps, 'rowRenderer' | 'data'>;
