@@ -13,7 +13,7 @@
 - Swipe to reply
 - Scroll to bottom
 - Haptic feedback on new message
-
+- Hashtag, mention and url is parsed optionally, or even use ur **own** logic.
 
 
 ## Installation
@@ -25,6 +25,8 @@ yarn add react-native-chatty
 
 - react-native-lottie
 - react-native-haptic-feedback / expo-haptics
+- react-native-parsed-text
+- eventemitter3
 
 
 
