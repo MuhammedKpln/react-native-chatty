@@ -73,3 +73,6 @@ export const Chatty = React.forwardRef(
     );
   }
 );
+
+//FIXME: remove for release
+export { ChatEmitter } from './utils/eventEmitter';

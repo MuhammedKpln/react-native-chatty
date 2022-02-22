@@ -1,10 +1,21 @@
 import dayjs from 'dayjs';
-import React, { useContext, useMemo } from 'react';
+import React, { useCallback, useContext, useMemo } from 'react';
 import type { ViewStyle } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
 import { PropsContext } from './Chatty';
 import { ReplyingTo } from './components/ReplyingTo';
 import type { IChatBubble } from './types/Chatty.types';
+import { ChatEmitter } from './utils/eventEmitter';
+import {
+  ALL_PATERNS_SHAPES,
+  HASHTAG_PATTERN_SHAPE,
+  LoadAllPaternShapes,
+  loadParsedText,
+  MENTION_PATTERN_SHAPE,
+  URL_PATTERN_SHAPE,
+} from './utils/patterns';
+
+const ParsedText = loadParsedText();
 
 function _ChatBubble(props: IChatBubble) {
   const { message, customContent } = props;
@@ -56,6 +67,52 @@ function _ChatBubble(props: IChatBubble) {
     };
   }, [message?.me]);
 
+  const onPressPattern = useCallback(
+    (pattern: string, index: number) => {
+      if (!message) return;
+      ChatEmitter.emit('patternPressed', pattern, index, message);
+    },
+    [message]
+  );
+
+  const messagePatterns = useMemo(() => {
+    const patterns: any[] = [];
+
+    if (!propsContext?.enablePatterns) return;
+    if (!ParsedText) return;
+
+    LoadAllPaternShapes(onPressPattern);
+
+    if (propsContext.patternProps?.customPatterns) {
+      patterns.push(...propsContext.patternProps.customPatterns);
+    }
+
+    if (propsContext?.patternProps?.allowPatterns) {
+      propsContext.patternProps.allowPatterns.forEach((pattern) => {
+        switch (pattern) {
+          case 'hashtag':
+            patterns.push(HASHTAG_PATTERN_SHAPE);
+            break;
+          case 'mention':
+            patterns.push(MENTION_PATTERN_SHAPE);
+            break;
+          case 'url':
+            patterns.push(URL_PATTERN_SHAPE);
+            break;
+        }
+      });
+    } else {
+      ALL_PATERNS_SHAPES.forEach((pattern) => patterns.push(pattern));
+    }
+
+    return patterns;
+  }, [
+    onPressPattern,
+    propsContext?.enablePatterns,
+    propsContext?.patternProps?.allowPatterns,
+    propsContext?.patternProps?.customPatterns,
+  ]);
+
   return (
     <View style={[styles.wrapper, bubbleAlignment]}>
       {propsContext.bubbleProps?.trailingAccessory && message?.me && (
@@ -83,8 +140,14 @@ function _ChatBubble(props: IChatBubble) {
                 />
               )}
 
-              <Text>{message?.text}</Text>
-              <Text style={styles.date}>{createdAt}</Text>
+              {propsContext.enablePatterns && ParsedText ? (
+                <ParsedText parse={messagePatterns}>{message?.text}</ParsedText>
+              ) : (
+                <>
+                  <Text>{message?.text}</Text>
+                  <Text style={styles.date}>{createdAt}</Text>
+                </>
+              )}
             </>
           )}
         </>

@@ -34,6 +34,8 @@ export interface IChatty {
   scrollToBottomProps?: Omit<IScrollToBottomProps, 'onPress'>;
   setDateLocale?: string | ILocale;
   listProps?: Omit<IListProps, 'rowRenderer' | 'data'>;
+  enablePatterns?: boolean;
+  patternProps?: IPatternProps;
   onReply?: (message: IMessage) => void;
   closeReplyButton?: (props?: IFooterProps) => JSX.Element;
   renderFooter?: (props?: IFooterProps) => JSX.Element;
@@ -117,4 +119,16 @@ export interface IScrollToBottomProps
 
 export interface ITypingBubble {
   typingAnimation?: JSX.Element;
+}
+
+export interface IPatternShape {
+  type?: string;
+  pattern?: RegExp | string;
+  style: TextStyle;
+  onPress?: (pattern: string, index: number) => void;
+}
+
+export interface IPatternProps {
+  allowPatterns?: Array<'mention' | 'hashtag' | 'url'>;
+  customPatterns?: IPatternShape[];
 }
