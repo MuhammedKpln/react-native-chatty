@@ -262,6 +262,10 @@ export const List = React.forwardRef(
           />
         );
       } else {
+        if (propsContext?.renderTypingBubble) {
+          return propsContext.renderTypingBubble();
+        }
+
         return <Text>Typing...</Text>;
       }
     }, [propsContext]);
