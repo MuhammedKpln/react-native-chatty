@@ -1,11 +1,16 @@
+import { Platform } from 'react-native';
 import { HapticType } from '../types/Chatty.types';
 
 let hapticEngine: any;
 let triggerHaptic: (type: HapticType) => Promise<void>;
 
 try {
+  if (Platform.OS === 'web') {
+    throw new Error('Haptics are not supported on web');
+  }
+
   hapticEngine = require('expo-haptics');
-  console.log(hapticEngine);
+
   triggerHaptic = async (type: HapticType) => {
     switch (type) {
       case HapticType.Light:

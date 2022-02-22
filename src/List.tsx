@@ -9,6 +9,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { Platform } from 'react-native';
 import { ScrollView, Text, useWindowDimensions, View } from 'react-native';
 import { FadeOutUp } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -96,7 +97,7 @@ export const List = React.forwardRef(
           );
 
           if (!message.me && propsContext?.enableHapticFeedback) {
-            trigger(HapticType.Heavy);
+            if (Platform.OS !== 'web') trigger(HapticType.Heavy);
           }
         },
         scrollToEnd: (animated?: boolean) => {
