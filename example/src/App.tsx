@@ -4,7 +4,8 @@ import { useRef } from 'react';
 import { View } from 'react-native';
 import { Button, Image, Text } from 'react-native';
 //@ts-ignore
-import { Chatty } from 'react-native-chatty';
+import { Chatty, ChatEmitter } from 'react-native-chatty';
+//@ts-ignore
 import type { IMessage } from 'react-native-chatty/lib/typescript/src/types/Chatty.types';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import {
@@ -74,7 +75,7 @@ export default function App() {
     },
     {
       id: 4,
-      text: 'Hello!!!',
+      text: 'http://google.com Hello!!!',
       me: false,
       createdAt: dayjs().add(2, 'day').toDate(),
       user: {
@@ -85,7 +86,7 @@ export default function App() {
     },
     {
       id: 5,
-      text: 'Hello!!!',
+      text: '#hashtag Hello!!!',
       me: false,
       createdAt: dayjs().add(2, 'day').toDate(),
       user: {
@@ -96,7 +97,7 @@ export default function App() {
     },
     {
       id: 6,
-      text: 'Hello!!!',
+      text: '@JaneDoe selam @mention2',
       me: false,
       createdAt: dayjs().add(2, 'day').toDate(),
       user: {
@@ -145,6 +146,16 @@ export default function App() {
     // }
   };
 
+  React.useEffect(() => {
+    ChatEmitter?.addListener('patternPressed', (pattern, message) => {
+      console.warn('patern pressed', pattern, message);
+    });
+
+    return () => {
+      ChatEmitter?.removeAllListeners();
+    };
+  }, []);
+
   const onPressSend = React.useCallback(
     ({ text, repliedTo }) => {
       //@ts-ignore
@@ -162,7 +173,7 @@ export default function App() {
       });
       //@ts-ignore
 
-      listRef.current.setIsTyping(false);
+      listRef.current.setIsTyping(text.length > 0);
       setReplying(null);
     },
     [messages]
@@ -179,7 +190,11 @@ export default function App() {
       <GestureHandlerRootView>
         <Chatty
           enableHapticFeedback
+          enablePatterns
           messages={messages}
+          patternProps={{
+            allowPatterns: ['url'],
+          }}
           ref={listRef}
           closeReplyButton={(props) => (
             <Button
@@ -188,6 +203,17 @@ export default function App() {
             />
           )}
           bubbleProps={{
+            trailingAccessory: (
+              <Image
+                style={{
+                  width: 20,
+                  height: 20,
+                }}
+                source={{
+                  uri: 'https://i.imgur.com/BT8D542.png',
+                }}
+              />
+            ),
             replyDragElement: (
               <Image
                 source={{
