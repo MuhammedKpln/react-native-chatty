@@ -5,7 +5,8 @@ export function loadParsedText() {
     const ReactNativeParsedText = require('react-native-parsed-text').default;
 
     return ReactNativeParsedText;
-  } catch {
+  } catch (err) {
+    console.error(err);
     console.warn(
       "Couldn't load react-native-parsed-text and eventemitter3, please install it if you want to use the pattern feature"
     );

@@ -237,7 +237,7 @@ export const List = React.forwardRef(
       const LottieView = loadLottie();
 
       if (LottieView) {
-        if (propsContext.renderTypingBubble) {
+        if (propsContext?.renderTypingBubble) {
           return propsContext.renderTypingBubble({
             typingAnimation: (
               <LottieView
