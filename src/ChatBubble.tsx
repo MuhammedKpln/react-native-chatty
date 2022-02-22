@@ -70,7 +70,7 @@ function _ChatBubble(props: IChatBubble) {
   const onPressPattern = useCallback(
     (pattern: string, index: number) => {
       if (!message) return;
-      ChatEmitter.emit('patternPressed', pattern, index, message);
+      ChatEmitter?.emit('patternPressed', pattern, index, message);
     },
     [message]
   );
