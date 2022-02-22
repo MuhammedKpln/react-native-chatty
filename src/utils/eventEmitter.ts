@@ -17,4 +17,6 @@ type ChatEvents = {
   patternPressed: (pattern: string, index: number, message: IMessage) => void;
 };
 
-export const ChatEmitter = new _.EventEmitter() as TypedEmitter<ChatEvents>;
+export const ChatEmitter = _
+  ? (new _().EventEmitter() as TypedEmitter<ChatEvents>)
+  : undefined;
