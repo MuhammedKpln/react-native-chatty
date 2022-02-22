@@ -17,6 +17,10 @@ type ChatEvents = {
   patternPressed: (pattern: string, index: number, message: IMessage) => void;
 };
 
-export const ChatEmitter = _
-  ? (new _().EventEmitter() as TypedEmitter<ChatEvents>)
-  : undefined;
+let ChatEmitter: TypedEmitter<ChatEvents> | undefined;
+
+if (_) {
+  ChatEmitter = new _.EventEmitter() as TypedEmitter<ChatEvents>;
+}
+
+export { ChatEmitter };
