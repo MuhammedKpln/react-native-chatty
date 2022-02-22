@@ -1,6 +1,6 @@
 # react-native-chatty
 
-💬 Full-featured high performance chat UI for React Native
+💬 Full-featured high performance chat UI for React Native & Web (Pretty soon)
 
 [Check out Expo snack (For better results, try on real devices.)](https://snack.expo.dev/@muhammedkpln/react-native-chatty-example)
 
