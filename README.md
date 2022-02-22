@@ -2,6 +2,14 @@
 
 💬 Full-featured high performance chat UI for React Native & Web (Pretty soon)
 
+## Demo 
+
+With and without customizations: 
+<p align="center">
+  <img src="https://i.imgur.com/k7G9Yog.png" width="250" title="hover text">
+</p>
+
+
 [Check out Expo snack (For better results, try on real devices.)](https://snack.expo.dev/@muhammedkpln/react-native-chatty-example)
 
 ## Features
@@ -40,7 +48,7 @@ import { Chatty } from "react-native-chatty";
 
 // For more information visit
 
-//https://github.com/MuhammedKpln/react-native-chatty/wiki
+//https://github.com/MuhammedKpln/react-native-chatty/wiki (Pretty soon!)
 
 ```
 
