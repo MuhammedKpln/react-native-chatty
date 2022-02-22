@@ -1,6 +1,13 @@
 import type { IMessage } from 'src/types/Chatty.types';
-import * as _ from 'eventemitter3';
 import type TypedEmitter from 'typed-emitter';
+
+let _: any;
+
+try {
+  _ = require('eventemitter3');
+} catch {
+  console.warn("Please install 'eventemitter3' to use pattern feature");
+}
 
 export type EventMap = {
   [key: string]: (...args: any[]) => void;
