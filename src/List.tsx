@@ -9,13 +9,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {
-  Platform,
-  ScrollView,
-  Text,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+import { Platform, ScrollView, useWindowDimensions, View } from 'react-native';
 import { FadeOutUp } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
@@ -29,6 +23,7 @@ import { PropsContext } from './Chatty';
 import { FAB, IFabRef } from './components/FAB';
 import { LoadEarlier } from './components/LoadEarlier';
 import { RenderDate } from './components/RenderDate';
+import { TypingStatus } from './components/TypingStatus';
 import { useHaptic } from './hooks/useHaptic';
 import { usePrevious } from './hooks/usePrevious';
 import { SwipeableBubble } from './SwipeableBubble';
@@ -36,11 +31,11 @@ import {
   HapticType,
   IListProps,
   IMessage,
+  ITypingStatusRef,
   LayoutType,
   ListRef,
 } from './types/Chatty.types';
 import { loadAnimated } from './utils/animated';
-import { loadLottie } from './utils/lottie';
 import { wait } from './utils/wait';
 import { AnimatedWrapper } from './wrappers/AnimatedWrapper';
 
@@ -66,11 +61,11 @@ export const List = React.forwardRef(
   (props: IListProps, ref: ForwardedRef<ListRef>) => {
     const propsContext = useContext(PropsContext);
     const recyclerlistviewRef = useRef<RecyclerListView<any, any>>();
-    const [isTyping, setIsTyping] = useState(false);
     const windowDimensions = useWindowDimensions();
     const safeArea = useSafeAreaInsets();
     const { trigger } = useHaptic();
     const fabRef = useRef<IFabRef>(null);
+    const typingStatusRef = useRef<ITypingStatusRef>(null);
     const listHeight = useMemo(
       () => windowDimensions.height - 150 - safeArea.bottom - safeArea.top,
       [windowDimensions, safeArea]
@@ -135,9 +130,8 @@ export const List = React.forwardRef(
           recyclerlistviewRef.current?.scrollToEnd(animated);
         },
         setIsTyping: (typing?: boolean) => {
-          if (typing) return setIsTyping(typing);
-
-          setIsTyping((prev) => !prev);
+          typingStatusRef.current?.setIsTyping(typing ?? false);
+          recyclerlistviewRef.current?.scrollToEnd(true);
         },
         removeMessage: (id: number) => {
           setMessages(
@@ -292,42 +286,6 @@ export const List = React.forwardRef(
       [renderBubble]
     );
 
-    const renderFooter = useCallback(() => {
-      const LottieView = loadLottie();
-
-      if (LottieView) {
-        if (propsContext?.renderTypingBubble) {
-          return propsContext.renderTypingBubble({
-            typingAnimation: (
-              <LottieView
-                source={require('./assets/lottie/typing.json')}
-                autoPlay
-                style={{ width: 30 }}
-              />
-            ),
-          });
-        }
-
-        return (
-          <ChatBubble
-            customContent={
-              <LottieView
-                source={require('./assets/lottie/typing.json')}
-                autoPlay
-                style={{ width: 30 }}
-              />
-            }
-          />
-        );
-      } else {
-        if (propsContext?.renderTypingBubble) {
-          return propsContext.renderTypingBubble();
-        }
-
-        return <Text>Typing...</Text>;
-      }
-    }, [propsContext]);
-
     const onScroll = useCallback(
       (e: ScrollEvent, offsetX: number, offsetY: number) => {
         if (e.nativeEvent.contentOffset.y <= 0) {
@@ -375,7 +333,7 @@ export const List = React.forwardRef(
           onScroll={onScroll}
           optimizeForInsertDeleteAnimations
           rowRenderer={rowRenderer}
-          renderFooter={() => (isTyping ? renderFooter() : null)}
+          renderFooter={() => <TypingStatus ref={typingStatusRef} />}
           onEndReached={props?.onEndReached}
           onEndReachedThreshold={props?.onEndReachedThreshold}
         />

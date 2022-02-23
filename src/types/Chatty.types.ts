@@ -165,3 +165,7 @@ export interface ITickProps {
   deliveredElement?: JSX.Element;
   readElement?: JSX.Element;
 }
+
+export interface ITypingStatusRef {
+  setIsTyping: (isTyping: boolean) => void;
+}
