@@ -91,13 +91,38 @@ export const List = React.forwardRef(
     useImperativeHandle(
       ref,
       () => ({
-        appendMessage: (message: IMessage) => {
-          setMessages(
-            dataProvider.cloneWithRows([...messages.getAllData(), message])
-          );
+        appendMessage: (
+          message: IMessage | IMessage[],
+          firstIndex?: boolean
+        ) => {
+          if (firstIndex) {
+            if (Array.isArray(message)) {
+              setMessages(
+                dataProvider.cloneWithRows([
+                  ...message,
+                  ...messages.getAllData(),
+                ])
+              );
+            } else {
+              dataProvider.cloneWithRows([message, ...messages.getAllData()]);
+            }
+          } else {
+            if (Array.isArray(message)) {
+              setMessages(
+                dataProvider.cloneWithRows([
+                  ...messages.getAllData(),
+                  ...message,
+                ])
+              );
+            } else {
+              dataProvider.cloneWithRows([...messages.getAllData(), message]);
+            }
+          }
 
-          if (!message.me && propsContext?.enableHapticFeedback) {
-            if (Platform.OS !== 'web') trigger(HapticType.Heavy);
+          if (!Array.isArray(message)) {
+            if (!message.me && propsContext?.enableHapticFeedback) {
+              if (Platform.OS !== 'web') trigger(HapticType.Heavy);
+            }
           }
         },
         scrollToEnd: (animated?: boolean) => {
