@@ -132,3 +132,13 @@ export interface IPatternProps {
   allowPatterns?: Array<'mention' | 'hashtag' | 'url'>;
   customPatterns?: IPatternShape[];
 }
+
+export const LayoutType = {
+  Normal: 0,
+  Replied: 1,
+  Dated: 2,
+  Long: 3,
+  Long2x: 4,
+  Long3x: 5,
+  ExtremeLong: 6,
+};

@@ -9,8 +9,13 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Platform } from 'react-native';
-import { ScrollView, Text, useWindowDimensions, View } from 'react-native';
+import {
+  Platform,
+  ScrollView,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import { FadeOutUp } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
@@ -31,6 +36,7 @@ import {
   HapticType,
   IListProps,
   IMessage,
+  LayoutType,
   ListRef,
 } from './types/Chatty.types';
 import { loadAnimated } from './utils/animated';
@@ -162,12 +168,29 @@ export const List = React.forwardRef(
         (index) => {
           const currentMessage: IMessage = messages.getAllData()[index];
           const prevMessage: IMessage = messages.getAllData()[index - 1];
+          console.log(currentMessage.text.length);
 
-          const isFirstMessage = index === 0;
+          if (currentMessage.text.length >= 600) {
+            return LayoutType.ExtremeLong;
+          }
+
+          if (currentMessage.text.length >= 400) {
+            return LayoutType.Long3x;
+          }
+
+          if (currentMessage.text.length >= 200) {
+            return LayoutType.Long2x;
+          }
+
+          if (currentMessage.text.length >= 100) {
+            return LayoutType.Long;
+          }
 
           if (currentMessage.repliedTo) {
-            return 2;
+            return LayoutType.Replied;
           }
+
+          const isFirstMessage = index === 0;
 
           if (
             (!isFirstMessage &&
@@ -175,27 +198,44 @@ export const List = React.forwardRef(
                 dayjs(prevMessage.createdAt).date()) ||
             isFirstMessage
           ) {
-            return 1;
+            return LayoutType.Dated;
           }
 
-          return 0;
+          return LayoutType.Normal;
         },
         (type, dim) => {
-          if (type === 0) {
-            dim.height = 85;
-            dim.width = windowDimensions.width;
-          }
-          if (type === 1) {
-            dim.height = 110;
-            dim.width = windowDimensions.width;
-          }
-          if (type === 2) {
-            dim.height = 190;
-            dim.width = windowDimensions.width;
+          dim.width = windowDimensions.width;
+
+          switch (type) {
+            case LayoutType.Normal:
+              dim.height = 85;
+              break;
+            case LayoutType.Replied:
+              dim.height = 190;
+              break;
+            case LayoutType.Dated:
+              dim.height = 110;
+              break;
+            case LayoutType.Long:
+              dim.height = 130;
+              break;
+            case LayoutType.Long2x:
+              dim.height = 170;
+              break;
+            case LayoutType.Long3x:
+              dim.height = 350;
+              break;
+            case LayoutType.ExtremeLong:
+              dim.height = 550;
+              break;
+
+            default:
+              dim.height = 85;
+              break;
           }
         }
       );
-    }, [windowDimensions.width, messages]);
+    }, [messages, windowDimensions.width]);
 
     const renderBubble = useCallback(
       (data: IMessage, withDate?: boolean) => {
@@ -244,17 +284,11 @@ export const List = React.forwardRef(
 
     const rowRenderer = useCallback(
       (type, data: IMessage) => {
-        if (type === 0) {
-          return renderBubble(data);
-        }
-        if (type === 1) {
-          return renderBubble(data, true);
-        }
-        if (type === 2) {
+        if (type === LayoutType.Dated) {
           return renderBubble(data, true);
         }
 
-        return null;
+        return renderBubble(data);
       },
       [renderBubble]
     );
