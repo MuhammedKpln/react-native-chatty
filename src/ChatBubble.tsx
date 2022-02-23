@@ -126,28 +126,45 @@ function _ChatBubble(props: IChatBubble) {
     if (message?.status) {
       switch (message.status) {
         case MessageStatus.Sending:
-          return '🔄';
+          return (
+            propsContext.bubbleProps?.tickProps?.sendingElement ?? (
+              <Text>🔄</Text>
+            )
+          );
 
         case MessageStatus.Sent:
-          return '✅';
+          return (
+            propsContext.bubbleProps?.tickProps?.sentElement ?? <Text>✔</Text>
+          );
 
         case MessageStatus.Delivered:
-          return '✅';
+          return (
+            propsContext.bubbleProps?.tickProps?.deliveredElement ?? (
+              <Text>☑</Text>
+            )
+          );
 
         case MessageStatus.Read:
-          return '✅✅';
+          return (
+            propsContext.bubbleProps?.tickProps?.readElement ?? <Text>✅</Text>
+          );
       }
     }
 
     return null;
-  }, [message?.status]);
+  }, [
+    message?.status,
+    propsContext.bubbleProps?.tickProps?.deliveredElement,
+    propsContext.bubbleProps?.tickProps?.readElement,
+    propsContext.bubbleProps?.tickProps?.sendingElement,
+    propsContext.bubbleProps?.tickProps?.sentElement,
+  ]);
 
   const renderFooter = useCallback(() => {
     return (
       <View style={styles.bubbleFooter}>
-        <Text style={styles.date}>
-          {createdAt} <Text>{renderTicks()}</Text>
-        </Text>
+        <Text style={styles.date}>{createdAt}</Text>
+        {renderTicks()}
       </View>
     );
   }, [createdAt, renderTicks]);

@@ -64,6 +64,7 @@ export interface IChatBubble {
   replyDragElement?: JSX.Element;
   trailingAccessory?: JSX.Element;
   showAvatars?: IShowAvatarProps;
+  tickProps?: ITickProps;
 }
 
 export interface IShowAvatarProps {
@@ -155,5 +156,12 @@ export enum MessageStatus {
   Sending = 'sending',
   Sent = 'sent',
   Delivered = 'delivered',
-  Read = 'read',
+  Read = 'readed',
+}
+
+export interface ITickProps {
+  sendingElement?: JSX.Element;
+  sentElement?: JSX.Element;
+  deliveredElement?: JSX.Element;
+  readElement?: JSX.Element;
 }
