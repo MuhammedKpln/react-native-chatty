@@ -141,7 +141,12 @@ function _ChatBubble(props: IChatBubble) {
               )}
 
               {propsContext.enablePatterns && ParsedText ? (
-                <ParsedText parse={messagePatterns}>{message?.text}</ParsedText>
+                <>
+                  <ParsedText parse={messagePatterns}>
+                    {message?.text}
+                  </ParsedText>
+                  <Text style={styles.date}>{createdAt}</Text>
+                </>
               ) : (
                 <>
                   <Text>{message?.text}</Text>
