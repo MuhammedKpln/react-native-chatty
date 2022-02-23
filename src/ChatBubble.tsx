@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import React, { useCallback, useContext, useMemo } from 'react';
 import type { ViewStyle } from 'react-native';
+import { Image } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
 import { PropsContext } from './Chatty';
 import { ReplyingTo } from './components/ReplyingTo';
@@ -24,6 +25,14 @@ function _ChatBubble(props: IChatBubble) {
   const createdAt = useMemo(() => {
     return message && dayjs(message.createdAt).format('HH:mm');
   }, [message]);
+
+  const avatarSize = useMemo(() => {
+    return {
+      width: propsContext.bubbleProps?.showAvatars?.width || 40,
+      height: propsContext.bubbleProps?.showAvatars?.width || 40,
+      borderRadius: propsContext.bubbleProps?.showAvatars?.width || 40,
+    };
+  }, [propsContext.bubbleProps?.showAvatars?.width]);
 
   const bubbleBackgroundColor = useMemo<ViewStyle>(() => {
     if (propsContext.bubbleProps?.containerStyle) {
@@ -119,6 +128,15 @@ function _ChatBubble(props: IChatBubble) {
         <View>{propsContext.bubbleProps.trailingAccessory}</View>
       )}
 
+      {propsContext.bubbleProps?.showAvatars?.visible && !message?.me && (
+        <Image
+          source={
+            message?.user.avatar ?? require('./assets/images/noavatar.png')
+          }
+          style={[styles.avatar, avatarSize]}
+        />
+      )}
+
       <View
         style={[
           bubbleBackgroundColor,
@@ -158,6 +176,15 @@ function _ChatBubble(props: IChatBubble) {
         </>
       </View>
 
+      {propsContext.bubbleProps?.showAvatars?.visible && message?.me && (
+        <Image
+          source={
+            message?.user.avatar ?? require('./assets/images/noavatar.png')
+          }
+          style={[styles.avatarMe, avatarSize]}
+        />
+      )}
+
       {propsContext.bubbleProps?.trailingAccessory && !message?.me && (
         <View>{propsContext.bubbleProps.trailingAccessory}</View>
       )}
@@ -183,5 +210,11 @@ export const styles = StyleSheet.create({
     fontSize: 11,
     alignSelf: 'flex-end',
     marginTop: 5,
+  },
+  avatar: {
+    marginLeft: 10,
+  },
+  avatarMe: {
+    marginRight: 10,
   },
 });

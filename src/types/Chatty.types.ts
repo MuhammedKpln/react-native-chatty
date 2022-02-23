@@ -62,6 +62,13 @@ export interface IChatBubble {
   otherBubbleColor?: string;
   replyDragElement?: JSX.Element;
   trailingAccessory?: JSX.Element;
+  showAvatars?: IShowAvatarProps;
+}
+
+export interface IShowAvatarProps {
+  width?: number;
+  height?: number;
+  visible: boolean;
 }
 
 export interface ISwipeableBubble
