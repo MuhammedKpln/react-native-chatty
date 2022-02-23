@@ -1,13 +1,18 @@
+import dayjs from 'dayjs';
 import type { ForwardedRef } from 'react';
-import React from 'react';
-import { useEffect } from 'react';
-import { Keyboard, KeyboardAvoidingView, Platform } from 'react-native';
+import React, { useCallback, useEffect, useRef } from 'react';
+import {
+  ActivityIndicator,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { Footer } from './Footer';
 import { Header } from './Header';
 import { List } from './List';
 import type { IChatty, ListRef } from './types/Chatty.types';
-import dayjs from 'dayjs';
-import { useRef } from 'react';
 
 export const PropsContext = React.createContext<IChatty>({} as IChatty);
 
@@ -40,6 +45,14 @@ export const Chatty = React.forwardRef(
       }
     }, [props.setDateLocale]);
 
+    const renderLoading = useCallback(() => {
+      return (
+        <View style={[styles.loadingContainer]}>
+          <ActivityIndicator />
+        </View>
+      );
+    }, []);
+
     return (
       <PropsContext.Provider value={props}>
         {props?.renderHeader ? (
@@ -56,17 +69,25 @@ export const Chatty = React.forwardRef(
             android: 30,
           })}
         >
-          <List
-            data={messages}
-            //@ts-ignore
-            ref={ref ?? listRef}
-            rowRenderer={props?.renderBubble ? props.renderBubble : undefined}
-            {...props.listProps}
-          />
-          {props?.renderFooter ? (
-            props.renderFooter(props.footerProps)
+          {props.messages.length < 1 ? (
+            renderLoading()
           ) : (
-            <Footer {...props.footerProps} replyingTo={props.replyingTo} />
+            <>
+              <List
+                data={messages}
+                //@ts-ignore
+                ref={ref ?? listRef}
+                rowRenderer={
+                  props?.renderBubble ? props.renderBubble : undefined
+                }
+                {...props.listProps}
+              />
+              {props?.renderFooter ? (
+                props.renderFooter(props.footerProps)
+              ) : (
+                <Footer {...props.footerProps} replyingTo={props.replyingTo} />
+              )}
+            </>
           )}
         </KeyboardAvoidingView>
       </PropsContext.Provider>
@@ -75,5 +96,14 @@ export const Chatty = React.forwardRef(
 );
 
 //FIXME: remove for release
-export { ChatEmitter } from './utils/eventEmitter';
 export { MessageStatus } from './types/Chatty.types';
+export { ChatEmitter } from './utils/eventEmitter';
+
+export const styles = StyleSheet.create({
+  loadingContainer: {
+    height: '90%',
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+  },
+});
