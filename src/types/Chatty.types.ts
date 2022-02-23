@@ -19,6 +19,7 @@ export interface IMessage {
   me: boolean;
   createdAt: Date;
   repliedTo?: IMessage;
+  status?: MessageStatus;
 }
 
 export interface IChatty {
@@ -149,3 +150,10 @@ export const LayoutType = {
   Long3x: 5,
   ExtremeLong: 6,
 };
+
+export enum MessageStatus {
+  Sending = 'sending',
+  Sent = 'sent',
+  Delivered = 'delivered',
+  Read = 'read',
+}

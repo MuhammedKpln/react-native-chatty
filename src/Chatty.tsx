@@ -76,3 +76,4 @@ export const Chatty = React.forwardRef(
 
 //FIXME: remove for release
 export { ChatEmitter } from './utils/eventEmitter';
+export { MessageStatus } from './types/Chatty.types';

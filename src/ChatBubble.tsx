@@ -5,7 +5,7 @@ import { Image } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
 import { PropsContext } from './Chatty';
 import { ReplyingTo } from './components/ReplyingTo';
-import type { IChatBubble } from './types/Chatty.types';
+import { IChatBubble, MessageStatus } from './types/Chatty.types';
 import { ChatEmitter } from './utils/eventEmitter';
 import {
   ALL_PATERNS_SHAPES,
@@ -122,6 +122,36 @@ function _ChatBubble(props: IChatBubble) {
     propsContext?.patternProps?.customPatterns,
   ]);
 
+  const renderTicks = useCallback(() => {
+    if (message?.status) {
+      switch (message.status) {
+        case MessageStatus.Sending:
+          return '🔄';
+
+        case MessageStatus.Sent:
+          return '✅';
+
+        case MessageStatus.Delivered:
+          return '✅';
+
+        case MessageStatus.Read:
+          return '✅✅';
+      }
+    }
+
+    return null;
+  }, [message?.status]);
+
+  const renderFooter = useCallback(() => {
+    return (
+      <View style={styles.bubbleFooter}>
+        <Text style={styles.date}>
+          {createdAt} <Text>{renderTicks()}</Text>
+        </Text>
+      </View>
+    );
+  }, [createdAt, renderTicks]);
+
   return (
     <View style={[styles.wrapper, bubbleAlignment]}>
       {propsContext.bubbleProps?.trailingAccessory && message?.me && (
@@ -163,13 +193,13 @@ function _ChatBubble(props: IChatBubble) {
                   <ParsedText parse={messagePatterns}>
                     {message?.text}
                   </ParsedText>
-                  <Text style={styles.date}>{createdAt}</Text>
+                  {renderFooter()}
                 </>
               ) : (
-                <>
+                <View>
                   <Text>{message?.text}</Text>
-                  <Text style={styles.date}>{createdAt}</Text>
-                </>
+                  {renderFooter()}
+                </View>
               )}
             </>
           )}
@@ -208,13 +238,16 @@ export const styles = StyleSheet.create({
   date: {
     color: '#a8a8a8',
     fontSize: 11,
-    alignSelf: 'flex-end',
-    marginTop: 5,
   },
   avatar: {
     marginLeft: 10,
   },
   avatarMe: {
     marginRight: 10,
+  },
+  bubbleFooter: {
+    justifyContent: 'flex-end',
+    flexDirection: 'row',
+    marginTop: 5,
   },
 });

@@ -168,7 +168,6 @@ export const List = React.forwardRef(
         (index) => {
           const currentMessage: IMessage = messages.getAllData()[index];
           const prevMessage: IMessage = messages.getAllData()[index - 1];
-          console.log(currentMessage.text.length);
 
           if (currentMessage.text.length >= 600) {
             return LayoutType.ExtremeLong;
