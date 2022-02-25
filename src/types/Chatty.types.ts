@@ -175,7 +175,7 @@ export interface ITypingStatusRef {
 }
 
 export interface IActionProps {
-  options: Pick<ContextMenuAction, 'title' | 'destructive'>[];
+  options: Pick<ContextMenuAction, 'title' | 'destructive' | 'systemIcon'>[];
   onPress: (index: number) => void;
   cancelButtonLabel?: string;
 }
