@@ -61,7 +61,7 @@ export interface IChatBubble {
   selfBubbleColor?: string;
   otherBubbleColor?: string;
   labelStyle?: (isSelf: boolean) => TextStyle;
-  dateStyle?: TextStyle;
+  dateStyle?: (isSelf: boolean) => TextStyle;
   replyDragElement?: JSX.Element;
   trailingAccessory?: JSX.Element;
   showAvatars?: IShowAvatarProps;

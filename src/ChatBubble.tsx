@@ -167,13 +167,23 @@ function _ChatBubble(props: IChatBubble) {
   const renderFooter = useCallback(() => {
     return (
       <View style={styles.bubbleFooter}>
-        <Text style={[styles.date, propsContext.bubbleProps?.dateStyle]}>
+        <Text
+          style={[
+            styles.date,
+            propsContext.bubbleProps?.dateStyle!(message?.me ?? false),
+          ]}
+        >
           {createdAt}
         </Text>
         {renderTicks()}
       </View>
     );
-  }, [createdAt, propsContext.bubbleProps?.dateStyle, renderTicks]);
+  }, [
+    createdAt,
+    message?.me,
+    propsContext.bubbleProps?.dateStyle,
+    renderTicks,
+  ]);
 
   const renderCornerRounding = useCallback(() => {
     if (propsContext.bubbleProps?.enableCornerRounding === false) return null;
