@@ -105,7 +105,9 @@ export const List = React.forwardRef(
                 ])
               );
             } else {
-              dataProvider.cloneWithRows([message, ...messages.getAllData()]);
+              setMessages(
+                dataProvider.cloneWithRows([message, ...messages.getAllData()])
+              );
             }
           } else {
             if (Array.isArray(message)) {
@@ -116,7 +118,9 @@ export const List = React.forwardRef(
                 ])
               );
             } else {
-              dataProvider.cloneWithRows([...messages.getAllData(), message]);
+              setMessages(
+                dataProvider.cloneWithRows([...messages.getAllData(), message])
+              );
             }
           }
 
