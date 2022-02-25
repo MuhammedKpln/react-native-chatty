@@ -60,7 +60,7 @@ export interface IChatBubble {
   containerStyle?: ViewStyle;
   selfBubbleColor?: string;
   otherBubbleColor?: string;
-  labelStyle?: TextStyle;
+  labelStyle?: (isSelf: boolean) => TextStyle;
   dateStyle?: TextStyle;
   replyDragElement?: JSX.Element;
   trailingAccessory?: JSX.Element;

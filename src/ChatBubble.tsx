@@ -265,7 +265,13 @@ function _ChatBubble(props: IChatBubble) {
                 </>
               ) : (
                 <View>
-                  <Text style={propsContext.bubbleProps?.labelStyle}>
+                  <Text
+                    style={
+                      propsContext?.bubbleProps?.labelStyle!(
+                        message?.me ?? false
+                      ) ?? {}
+                    }
+                  >
                     {message?.text}
                   </Text>
                   {renderFooter()}
