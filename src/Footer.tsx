@@ -144,7 +144,7 @@ function _Footer(props: IFooterProps) {
           value={props.value ?? message}
           onChangeText={onChangeText}
           style={[styles.textInput, props?.inputStyle]}
-          placeholder="Type a message..."
+          placeholder={props?.placeholder ?? 'Type a message...'}
           onKeyPress={(e) => onKeyPress(e.nativeEvent.key)}
         />
         {props?.sendButton ? (
