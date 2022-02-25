@@ -95,10 +95,6 @@ export const Chatty = React.forwardRef(
   }
 );
 
-//FIXME: remove for release
-export { MessageStatus } from './types/Chatty.types';
-export { ChatEmitter } from './utils/eventEmitter';
-
 export const styles = StyleSheet.create({
   loadingContainer: {
     height: '90%',
