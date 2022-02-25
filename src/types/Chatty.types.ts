@@ -95,6 +95,7 @@ export interface IFooterProps extends Pick<IChatty, 'replyingTo'> {
   value?: string;
   inputStyle?: ViewStyle;
   containerStyle?: ViewStyle;
+  placeholder?: string;
   replyStyles?: {
     containerStyle?: ViewStyle;
     labelStyle?: TextStyle;
@@ -184,6 +185,5 @@ export interface ITypingStatusRef {
 
 export interface IActionProps {
   options: Pick<ContextMenuAction, 'title' | 'destructive' | 'systemIcon'>[];
-  onPress: (index: number) => void;
   cancelButtonLabel?: string;
 }

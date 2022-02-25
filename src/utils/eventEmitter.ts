@@ -1,5 +1,5 @@
 import { EventEmitter } from 'eventemitter3';
-import type { IMessage } from 'src/types/Chatty.types';
+import type { IMessage } from '../types/Chatty.types';
 import type TypedEmitter from 'typed-emitter';
 
 export type EventMap = {
