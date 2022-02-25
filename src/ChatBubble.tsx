@@ -237,8 +237,8 @@ function _ChatBubble(props: IChatBubble) {
         <View
           style={[
             bubbleBackgroundColor,
-            propsContext.bubbleProps?.containerStyle,
             styles.container,
+            propsContext.bubbleProps?.containerStyle,
             { padding: message?.repliedTo ? 5 : 15 },
           ]}
         >
