@@ -37,10 +37,15 @@ function _ChatBubble(props: IChatBubble) {
     if (propsContext.bubbleProps?.containerStyle) {
       if (message?.me) {
         return {
+          backgroundColor:
+            propsContext?.bubbleProps?.selfBubbleColor ?? '#afddfa',
           ...propsContext.bubbleProps.containerStyle,
         };
       } else {
         return {
+          backgroundColor:
+            propsContext?.bubbleProps?.otherBubbleColor ?? '#c8faaf',
+
           ...propsContext.bubbleProps.containerStyle,
         };
       }
@@ -189,7 +194,6 @@ function _ChatBubble(props: IChatBubble) {
             bubbleBackgroundColor,
             propsContext.bubbleProps?.containerStyle,
             styles.container,
-            bubbleBackgroundColor,
             { padding: message?.repliedTo ? 5 : 15 },
           ]}
         >
