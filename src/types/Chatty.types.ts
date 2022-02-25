@@ -4,8 +4,8 @@ import type {
   TouchableOpacityProps,
   ViewStyle,
 } from 'react-native';
+import type { ContextMenuAction } from 'react-native-context-menu-view';
 import type { RecyclerListViewProps } from 'recyclerlistview';
-
 export interface IUser {
   id: number;
   username: string;
@@ -65,6 +65,7 @@ export interface IChatBubble {
   trailingAccessory?: JSX.Element;
   showAvatars?: IShowAvatarProps;
   tickProps?: ITickProps;
+  actions?: IActionProps;
 }
 
 export interface IShowAvatarProps {
@@ -168,4 +169,10 @@ export interface ITickProps {
 
 export interface ITypingStatusRef {
   setIsTyping: (isTyping: boolean) => void;
+}
+
+export interface IActionProps {
+  options: Pick<ContextMenuAction, 'title' | 'destructive'>[];
+  onPress: (index: number) => void;
+  cancelButtonLabel?: string;
 }

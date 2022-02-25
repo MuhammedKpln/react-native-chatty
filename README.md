@@ -2,9 +2,9 @@
 
 💬 Full-featured high performance chat UI for React Native & Web (Pretty soon)
 
-## Demo 
+## Demo
 
-With and without customizations: 
+With and without customizations:
 <p align="center">
   <img src="https://i.imgur.com/k7G9Yog.png" width="250" title="hover text">
 </p>
@@ -35,6 +35,7 @@ yarn add react-native-chatty
 - react-native-haptic-feedback / expo-haptics
 - react-native-parsed-text
 - eventemitter3
+- react-native-context-menu-view
 
 
 

@@ -1,11 +1,10 @@
 import dayjs from 'dayjs';
 import React, { useCallback, useContext, useMemo } from 'react';
 import type { ViewStyle } from 'react-native';
-import { Image } from 'react-native';
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { PropsContext } from './Chatty';
 import { ReplyingTo } from './components/ReplyingTo';
-import { IChatBubble, MessageStatus } from './types/Chatty.types';
+import { IChatBubble, IMessage, MessageStatus } from './types/Chatty.types';
 import { ChatEmitter } from './utils/eventEmitter';
 import {
   ALL_PATERNS_SHAPES,
@@ -15,13 +14,13 @@ import {
   MENTION_PATTERN_SHAPE,
   URL_PATTERN_SHAPE,
 } from './utils/patterns';
+import { ContextMenuWrapper } from './wrappers/ContextMenuWrapper';
 
 const ParsedText = loadParsedText();
 
 function _ChatBubble(props: IChatBubble) {
   const { message, customContent } = props;
   const propsContext = useContext(PropsContext);
-
   const createdAt = useMemo(() => {
     return message && dayjs(message.createdAt).format('HH:mm');
   }, [message]);
@@ -184,16 +183,16 @@ function _ChatBubble(props: IChatBubble) {
         />
       )}
 
-      <View
-        style={[
-          bubbleBackgroundColor,
-          propsContext.bubbleProps?.containerStyle,
-          styles.container,
-          bubbleBackgroundColor,
-          { padding: message?.repliedTo ? 5 : 15 },
-        ]}
-      >
-        <>
+      <ContextMenuWrapper message={message as IMessage}>
+        <View
+          style={[
+            bubbleBackgroundColor,
+            propsContext.bubbleProps?.containerStyle,
+            styles.container,
+            bubbleBackgroundColor,
+            { padding: message?.repliedTo ? 5 : 15 },
+          ]}
+        >
           {customContent ? (
             customContent
           ) : (
@@ -220,8 +219,8 @@ function _ChatBubble(props: IChatBubble) {
               )}
             </>
           )}
-        </>
-      </View>
+        </View>
+      </ContextMenuWrapper>
 
       {propsContext.bubbleProps?.showAvatars?.visible && message?.me && (
         <Image
