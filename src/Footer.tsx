@@ -1,4 +1,5 @@
 import React, { useCallback, useContext, useState } from 'react';
+import { useMemo } from 'react';
 import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import string from 'string-similarity';
@@ -16,6 +17,14 @@ function _Footer(props: IFooterProps) {
   const [message, setMessage] = useState<string>('');
   const [mentions] = useState(['JohnDoe']);
   const [foundedMentions, setFoundedMentions] = useState<string[]>([]);
+
+  const cuttedText = useMemo(() => {
+    if (props.replyingTo) {
+      return props.replyingTo.text.slice(0, 100) + '...';
+    }
+
+    return null;
+  }, [props?.replyingTo]);
 
   const onChangeText = useCallback(
     (text: string) => {
@@ -79,7 +88,6 @@ function _Footer(props: IFooterProps) {
             style={{
               position: 'absolute',
               bottom: 50,
-
               width: '100%',
               padding: 10,
               backgroundColor: '#ccc',
@@ -119,9 +127,7 @@ function _Footer(props: IFooterProps) {
             >
               {props.replyingTo.user.username}
             </Text>
-            <Text style={props.replyStyles?.labelStyle}>
-              {props.replyingTo.text}
-            </Text>
+            <Text style={props.replyStyles?.labelStyle}>{cuttedText}</Text>
           </View>
           {propsContext.footerProps.closeReplyButton ? (
             propsContext.footerProps.closeReplyButton(props)

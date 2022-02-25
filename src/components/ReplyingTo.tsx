@@ -1,14 +1,19 @@
 import React from 'react';
+import { useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 function _ReplyingTo(props: { username: string; text: string }) {
   const { username, text } = props;
 
+  const cuttedText = useMemo(() => {
+    return text.slice(0, 100) + '...';
+  }, [text]);
+
   return (
     <View style={styles.reply}>
       <View style={styles.replyBody}>
         <Text style={styles.replyUsername}>{username}</Text>
-        <Text>{text}</Text>
+        <Text>{cuttedText}</Text>
       </View>
     </View>
   );
