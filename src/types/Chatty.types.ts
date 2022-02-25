@@ -38,7 +38,6 @@ export interface IChatty {
   enablePatterns?: boolean;
   patternProps?: IPatternProps;
   onReply?: (message: IMessage) => void;
-  closeReplyButton?: (props?: IFooterProps) => JSX.Element;
   renderFooter?: (props?: IFooterProps) => JSX.Element;
   renderHeader?: (props?: IChatHeaderProps) => JSX.Element;
   renderBubble?: (props?: IMessage) => JSX.Element;
@@ -91,7 +90,16 @@ export interface IFooterProps extends Pick<IChatty, 'replyingTo'> {
   onChangeText: (text: string) => void;
   onPressSend: (data: { text: string; repliedTo?: IMessage }) => void;
   onPressCancelReply: () => void;
+  closeReplyButton?: (props?: IFooterProps) => JSX.Element;
+  sendButton?: (props?: Pick<IFooterProps, 'onPressSend'>) => JSX.Element;
   value?: string;
+  inputStyle?: ViewStyle;
+  containerStyle?: ViewStyle;
+  replyStyles?: {
+    containerStyle?: ViewStyle;
+    labelStyle?: TextStyle;
+    usernameStyle?: TextStyle;
+  };
 }
 
 export interface ListRef {

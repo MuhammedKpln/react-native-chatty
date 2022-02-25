@@ -111,16 +111,20 @@ function _Footer(props: IFooterProps) {
         <AnimatedWrapper
           entering={FadeInDown}
           exiting={FadeOutDown}
-          style={styles.reply}
+          style={[styles.reply, props.replyStyles?.containerStyle]}
         >
           <View style={styles.replyBody}>
-            <Text style={styles.replyUsername}>
+            <Text
+              style={[styles.replyUsername, props.replyStyles?.usernameStyle]}
+            >
               {props.replyingTo.user.username}
             </Text>
-            <Text>{props.replyingTo.text}</Text>
+            <Text style={props.replyStyles?.labelStyle}>
+              {props.replyingTo.text}
+            </Text>
           </View>
-          {propsContext.closeReplyButton ? (
-            propsContext.closeReplyButton(props)
+          {propsContext.footerProps.closeReplyButton ? (
+            propsContext.footerProps.closeReplyButton(props)
           ) : (
             <Button title="cancel" onPress={props.onPressCancelReply} />
           )}
@@ -129,15 +133,21 @@ function _Footer(props: IFooterProps) {
 
       {renderMenu()}
 
-      <View style={styles.container}>
+      <View style={[styles.container, props.containerStyle]}>
         <TextInput
           value={props.value ?? message}
           onChangeText={onChangeText}
-          style={styles.textInput}
+          style={[styles.textInput, props?.inputStyle]}
           placeholder="Type a message..."
           onKeyPress={(e) => onKeyPress(e.nativeEvent.key)}
         />
-        <Button title="Send" onPress={onPressSend} color="#0084ff" />
+        {props?.sendButton ? (
+          props.sendButton({
+            onPressSend: onPressSend,
+          })
+        ) : (
+          <Button title="Send" onPress={onPressSend} color="#0084ff" />
+        )}
       </View>
     </View>
   );
