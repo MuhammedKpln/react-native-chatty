@@ -61,11 +61,14 @@ export interface IChatBubble {
   containerStyle?: ViewStyle;
   selfBubbleColor?: string;
   otherBubbleColor?: string;
+  labelStyle?: TextStyle;
+  dateStyle?: TextStyle;
   replyDragElement?: JSX.Element;
   trailingAccessory?: JSX.Element;
   showAvatars?: IShowAvatarProps;
   tickProps?: ITickProps;
   actions?: IActionProps;
+  enableCornerRounding?: boolean;
 }
 
 export interface IShowAvatarProps {

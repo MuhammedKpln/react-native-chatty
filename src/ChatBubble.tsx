@@ -167,11 +167,56 @@ function _ChatBubble(props: IChatBubble) {
   const renderFooter = useCallback(() => {
     return (
       <View style={styles.bubbleFooter}>
-        <Text style={styles.date}>{createdAt}</Text>
+        <Text style={[styles.date, propsContext.bubbleProps?.dateStyle]}>
+          {createdAt}
+        </Text>
         {renderTicks()}
       </View>
     );
-  }, [createdAt, renderTicks]);
+  }, [createdAt, propsContext.bubbleProps?.dateStyle, renderTicks]);
+
+  const renderCornerRounding = useCallback(() => {
+    if (propsContext.bubbleProps?.enableCornerRounding === false) return null;
+
+    if (message?.me) {
+      return (
+        <>
+          <View style={[styles.rightArrow, bubbleBackgroundColor]}></View>
+          <View
+            style={[
+              styles.rightArrowOverlap,
+              {
+                backgroundColor:
+                  propsContext.listProps?.containerStyle?.backgroundColor ??
+                  '#fff',
+              },
+            ]}
+          ></View>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <View style={[styles.leftArrow, bubbleBackgroundColor]}></View>
+          <View
+            style={[
+              styles.leftArrowOverlap,
+              {
+                backgroundColor:
+                  propsContext.listProps?.containerStyle?.backgroundColor ??
+                  '#fff',
+              },
+            ]}
+          ></View>
+        </>
+      );
+    }
+  }, [
+    bubbleBackgroundColor,
+    message?.me,
+    propsContext.bubbleProps?.enableCornerRounding,
+    propsContext.listProps?.containerStyle?.backgroundColor,
+  ]);
 
   return (
     <View style={[styles.wrapper, bubbleAlignment]}>
@@ -210,19 +255,25 @@ function _ChatBubble(props: IChatBubble) {
 
               {propsContext.enablePatterns && ParsedText ? (
                 <>
-                  <ParsedText parse={messagePatterns}>
+                  <ParsedText
+                    parse={messagePatterns}
+                    style={propsContext.bubbleProps?.labelStyle}
+                  >
                     {message?.text}
                   </ParsedText>
                   {renderFooter()}
                 </>
               ) : (
                 <View>
-                  <Text>{message?.text}</Text>
+                  <Text style={propsContext.bubbleProps?.labelStyle}>
+                    {message?.text}
+                  </Text>
                   {renderFooter()}
                 </View>
               )}
             </>
           )}
+          {renderCornerRounding()}
         </View>
       </ContextMenuWrapper>
 
@@ -251,9 +302,42 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   container: {
-    margin: 10,
+    margin: 20,
     maxWidth: 300,
     borderRadius: 10,
+  },
+  rightArrow: {
+    position: 'absolute',
+    width: 20,
+    height: 25,
+    bottom: 0,
+    borderBottomLeftRadius: 25,
+    right: -7,
+  },
+  rightArrowOverlap: {
+    position: 'absolute',
+    width: 20,
+    height: 35,
+    bottom: -6,
+    borderBottomLeftRadius: 18,
+    right: -20,
+  },
+  leftArrow: {
+    position: 'absolute',
+    width: 20,
+    height: 25,
+    bottom: 0,
+    borderBottomRightRadius: 25,
+    left: -10,
+  },
+
+  leftArrowOverlap: {
+    position: 'absolute',
+    width: 20,
+    height: 35,
+    bottom: -6,
+    borderBottomRightRadius: 18,
+    left: -20,
   },
   date: {
     color: '#a8a8a8',
