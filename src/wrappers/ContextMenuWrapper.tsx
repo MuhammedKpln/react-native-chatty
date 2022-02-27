@@ -2,8 +2,9 @@ import React, { useContext } from 'react';
 import { useCallback } from 'react';
 import { ActionSheetIOS, Platform, TouchableOpacity } from 'react-native';
 import type { IMessage } from '../types/Chatty.types';
-import { ChatEmitter, PropsContext } from '../Chatty';
+import { PropsContext } from '../Chatty';
 import { contextMenuView } from '../utils/contextMenu';
+import { ChatEmitter } from '../utils/eventEmitter';
 
 interface IProps {
   message: IMessage;
@@ -15,7 +16,7 @@ function ContextMenuWrapper(props: IProps) {
 
   const onPress = useCallback(
     (index) => {
-      ChatEmitter?.emit('actionPressed', index, props.message);
+      ChatEmitter.emit('actionPressed', index, props.message);
     },
     [props.message]
   );
