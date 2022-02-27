@@ -1,6 +1,6 @@
 # react-native-chatty
 
-💬 Full-featured high performance chat UI for React Native & Web (Pretty soon)
+💬 Full-featured high performance chat UI for React Native.
 
 ## Demo
 
@@ -22,6 +22,8 @@ With and without customizations:
 - Scroll to bottom
 - Haptic feedback on new message
 - Hashtag, mention and url is parsed optionally, or even use ur **own** logic.
+- **Actions** via [iOS context menu(fallback to actionsheet if not available)](https://developer.apple.com/design/human-interface-guidelines/ios/controls/context-menus/) 
+- Mention **directly from input** by typing @mention
 
 
 ## Installation
@@ -34,7 +36,6 @@ yarn add react-native-chatty
 - react-native-lottie
 - react-native-haptic-feedback / expo-haptics
 - react-native-parsed-text
-- eventemitter3
 - react-native-context-menu-view
 
 
