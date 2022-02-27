@@ -170,7 +170,8 @@ function _ChatBubble(props: IChatBubble) {
         <Text
           style={[
             styles.date,
-            propsContext.bubbleProps?.dateStyle!(message?.me ?? false),
+            propsContext?.bubbleProps?.dateStyle &&
+              propsContext?.bubbleProps?.dateStyle!(message?.me ?? false),
           ]}
         >
           {createdAt}
@@ -181,7 +182,7 @@ function _ChatBubble(props: IChatBubble) {
   }, [
     createdAt,
     message?.me,
-    propsContext.bubbleProps?.dateStyle,
+    propsContext?.bubbleProps?.dateStyle,
     renderTicks,
   ]);
 
@@ -267,7 +268,10 @@ function _ChatBubble(props: IChatBubble) {
                 <>
                   <ParsedText
                     parse={messagePatterns}
-                    style={propsContext.bubbleProps?.labelStyle}
+                    style={
+                      propsContext?.bubbleProps?.labelStyle &&
+                      propsContext.bubbleProps?.labelStyle(message?.me ?? false)
+                    }
                   >
                     {message?.text}
                   </ParsedText>
@@ -277,9 +281,8 @@ function _ChatBubble(props: IChatBubble) {
                 <View>
                   <Text
                     style={
-                      propsContext?.bubbleProps?.labelStyle!(
-                        message?.me ?? false
-                      ) ?? {}
+                      propsContext?.bubbleProps?.labelStyle &&
+                      propsContext.bubbleProps?.labelStyle(message?.me ?? false)
                     }
                   >
                     {message?.text}
