@@ -32,6 +32,7 @@ export interface IChatty {
   bubbleProps?: Omit<IChatBubble, 'customContent'>;
   loadEarlierProps?: ILoadEarlierProps;
   enableHapticFeedback?: boolean;
+  enableImageUploads?: boolean;
   renderDateProps?: Omit<IRenderDateProps, 'date'>;
   showScrollToBottomButton?: boolean;
   scrollToBottomProps?: Omit<IScrollToBottomProps, 'onPress'>;
@@ -108,6 +109,7 @@ export interface IFooterProps extends Pick<IChatty, 'replyingTo'> {
     labelStyle?: TextStyle;
     usernameStyle?: TextStyle;
   };
+  renderImageAction: (props: { onPressImage: () => void }) => JSX.Element;
 }
 
 export interface ListRef {

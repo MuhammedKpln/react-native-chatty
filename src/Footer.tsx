@@ -138,7 +138,11 @@ function _Footer(props: IFooterProps) {
   return (
     <View
       style={
-        image && { position: 'absolute', bottom: -100, backgroundColor: '#fff' }
+        image.length > 0 && {
+          position: 'absolute',
+          bottom: -100,
+          backgroundColor: '#fff',
+        }
       }
     >
       {props.replyingTo && (
@@ -209,11 +213,20 @@ function _Footer(props: IFooterProps) {
             placeholder={props?.placeholder ?? 'Type a message...'}
             onKeyPress={(e) => onKeyPress(e.nativeEvent.key)}
           />
-          <View style={{ position: 'absolute', right: 80 }}>
-            <TouchableOpacity onPress={onPressImage}>
-              <Text style={{ fontSize: 20 }}>📷</Text>
-            </TouchableOpacity>
-          </View>
+
+          {propsContext?.enableImageUploads && (
+            <>
+              {props?.renderImageAction ? (
+                props.renderImageAction({
+                  onPressImage,
+                })
+              ) : (
+                <TouchableOpacity onPress={onPressImage}>
+                  <Text style={{ fontSize: 20 }}>📷</Text>
+                </TouchableOpacity>
+              )}
+            </>
+          )}
 
           {props?.sendButton ? (
             props.sendButton({
