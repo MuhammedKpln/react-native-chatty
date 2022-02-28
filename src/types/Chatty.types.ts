@@ -6,6 +6,7 @@ import type {
 } from 'react-native';
 import type { ContextMenuAction } from 'react-native-context-menu-view';
 import type { RecyclerListViewProps } from 'recyclerlistview';
+
 export interface IUser {
   id: number;
   username: string;
@@ -20,6 +21,7 @@ export interface IMessage {
   createdAt: Date;
   repliedTo?: IMessage;
   status?: MessageStatus;
+  media?: IMedia[];
 }
 
 export interface IChatty {
@@ -37,6 +39,7 @@ export interface IChatty {
   listProps?: Omit<IListProps, 'rowRenderer' | 'data'>;
   enablePatterns?: boolean;
   patternProps?: IPatternProps;
+  enableSkeletonLoader?: boolean;
   onReply?: (message: IMessage) => void;
   renderFooter?: (props?: IFooterProps) => JSX.Element;
   renderHeader?: (props?: IChatHeaderProps) => JSX.Element;
@@ -88,7 +91,11 @@ export interface IChatHeaderProps {
 
 export interface IFooterProps extends Pick<IChatty, 'replyingTo'> {
   onChangeText: (text: string) => void;
-  onPressSend: (data: { text: string; repliedTo?: IMessage }) => void;
+  onPressSend: (data: {
+    text: string;
+    repliedTo?: IMessage;
+    media?: IMedia[];
+  }) => void;
   onPressCancelReply: () => void;
   closeReplyButton?: (props?: IFooterProps) => JSX.Element;
   sendButton?: (props?: Pick<IFooterProps, 'onPressSend'>) => JSX.Element;
@@ -163,6 +170,8 @@ export const LayoutType = {
   Long2x: 4,
   Long3x: 5,
   ExtremeLong: 6,
+  Media: 7,
+  Media2x: 8,
 };
 
 export enum MessageStatus {
@@ -186,4 +195,16 @@ export interface ITypingStatusRef {
 export interface IActionProps {
   options: Pick<ContextMenuAction, 'title' | 'destructive' | 'systemIcon'>[];
   cancelButtonLabel?: string;
+}
+
+export enum MediaType {
+  Image = 0,
+  Video = 1,
+  Audio = 2,
+}
+
+export interface IMedia {
+  uri: string;
+  base64?: string;
+  type: MediaType;
 }

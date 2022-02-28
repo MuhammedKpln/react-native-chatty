@@ -1,11 +1,30 @@
 import dayjs from 'dayjs';
-import React, { useCallback, useContext, useMemo } from 'react';
-import type { ViewStyle } from 'react-native';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { Dimensions, ImageBackground } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
 import { PropsContext } from './Chatty';
 import { ReplyingTo } from './components/ReplyingTo';
-import { IChatBubble, IMessage, MessageStatus } from './types/Chatty.types';
+import {
+  IChatBubble,
+  IMessage,
+  MediaType,
+  MessageStatus,
+} from './types/Chatty.types';
 import { ChatEmitter } from './utils/eventEmitter';
+import { Skeleton } from './utils/moti';
 import {
   ALL_PATERNS_SHAPES,
   HASHTAG_PATTERN_SHAPE,
@@ -14,6 +33,7 @@ import {
   MENTION_PATTERN_SHAPE,
   URL_PATTERN_SHAPE,
 } from './utils/patterns';
+import { PhotoView } from './utils/photoView';
 import { ContextMenuWrapper } from './wrappers/ContextMenuWrapper';
 
 const ParsedText = loadParsedText();
@@ -21,6 +41,8 @@ const ParsedText = loadParsedText();
 function _ChatBubble(props: IChatBubble) {
   const { message, customContent } = props;
   const propsContext = useContext(PropsContext);
+  const [mediaLoaded, setMediaLoaded] = useState<boolean>(false);
+  const [showMedia, setShowMedia] = useState<boolean>(false);
   const createdAt = useMemo(() => {
     return message && dayjs(message.createdAt).format('HH:mm');
   }, [message]);
@@ -79,6 +101,18 @@ function _ChatBubble(props: IChatBubble) {
       alignSelf: 'flex-start',
     };
   }, [message?.me]);
+
+  useEffect(() => {
+    if (message?.media) {
+      message.media.forEach((media) => {
+        if (media.type === MediaType.Image) {
+          Image.prefetch(media.uri).then(() => {
+            setMediaLoaded(true);
+          });
+        }
+      });
+    }
+  }, [message?.media]);
 
   const onPressPattern = useCallback(
     (pattern: string, index: number) => {
@@ -229,6 +263,59 @@ function _ChatBubble(props: IChatBubble) {
     propsContext.listProps?.containerStyle?.backgroundColor,
   ]);
 
+  const renderMedia = useCallback(() => {
+    if (message?.media) {
+      return (
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+          {message?.media.map((media, index) => {
+            if (index < 3) {
+              return (
+                <TouchableOpacity onPress={() => setShowMedia(true)}>
+                  {media.type === MediaType.Image && (
+                    <Skeleton show={!mediaLoaded}>
+                      <Image source={{ uri: media.uri }} style={styles.media} />
+                    </Skeleton>
+                  )}
+                </TouchableOpacity>
+              );
+            }
+
+            return null;
+          })}
+
+          {message.media.length > 3 && (
+            <TouchableOpacity onPress={() => setShowMedia(true)}>
+              <ImageBackground
+                style={styles.media}
+                source={{ uri: message.media[3]?.uri }}
+                imageStyle={{
+                  borderRadius: 15,
+                }}
+              >
+                <View style={styles.backgroundOverlay}>
+                  <Text
+                    style={{ color: '#fff', textAlign: 'center', fontSize: 20 }}
+                  >
+                    + {message.media.length - 3}
+                  </Text>
+                </View>
+              </ImageBackground>
+            </TouchableOpacity>
+          )}
+
+          <PhotoView
+            images={message?.media}
+            imageIndex={0}
+            visible={showMedia}
+            onRequestClose={() => setShowMedia(false)}
+          />
+        </View>
+      );
+    }
+
+    return null;
+  }, [mediaLoaded, message, showMedia]);
+
   return (
     <View style={[styles.wrapper, bubbleAlignment]}>
       {propsContext.bubbleProps?.trailingAccessory && message?.me && (
@@ -266,6 +353,7 @@ function _ChatBubble(props: IChatBubble) {
 
               {propsContext.enablePatterns && ParsedText ? (
                 <>
+                  {renderMedia()}
                   <ParsedText
                     parse={messagePatterns}
                     style={
@@ -279,6 +367,7 @@ function _ChatBubble(props: IChatBubble) {
                 </>
               ) : (
                 <View>
+                  {renderMedia()}
                   <Text
                     style={
                       propsContext?.bubbleProps?.labelStyle &&
@@ -322,7 +411,7 @@ export const styles = StyleSheet.create({
   },
   container: {
     margin: 20,
-    maxWidth: 300,
+    maxWidth: Dimensions.get('screen').width - 120,
     borderRadius: 10,
   },
   rightArrow: {
@@ -372,5 +461,31 @@ export const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     flexDirection: 'row',
     marginTop: 5,
+  },
+  moreMedia: {
+    width: 100,
+    height: 100,
+    borderWidth: 1,
+    borderStyle: 'dashed',
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: '#ccc',
+  },
+  media: {
+    width: 110,
+    height: 100,
+    borderRadius: 15,
+    marginRight: 10,
+    marginBottom: 10,
+  },
+  backgroundOverlay: {
+    width: 110,
+    height: 100,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
   },
 });

@@ -183,6 +183,14 @@ export const List = React.forwardRef(
             return LayoutType.Long;
           }
 
+          if (currentMessage?.media) {
+            if (currentMessage.media.length > 2) {
+              return LayoutType.Media2x;
+            }
+
+            return LayoutType.Media;
+          }
+
           if (currentMessage.repliedTo) {
             return LayoutType.Replied;
           }
@@ -224,6 +232,12 @@ export const List = React.forwardRef(
               break;
             case LayoutType.ExtremeLong:
               dim.height = 550;
+              break;
+            case LayoutType.Media:
+              dim.height = 180;
+              break;
+            case LayoutType.Media2x:
+              dim.height = 300;
               break;
 
             default:

@@ -187,6 +187,7 @@ export default function App() {
             allowPatterns: ['url'],
           }}
           ref={listRef}
+          //@ts-ignore
           closeReplyButton={(props) => (
             <Button
               title="ok"

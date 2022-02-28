@@ -1,11 +1,18 @@
-import React, { useCallback, useContext, useState } from 'react';
-import { useMemo } from 'react';
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
+import {
+  Button,
+  ImageBackground,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import string from 'string-similarity';
 import { PropsContext } from './Chatty';
-import type { IFooterProps } from './types/Chatty.types';
+import { IFooterProps, IMedia, MediaType } from './types/Chatty.types';
 import { loadAnimated } from './utils/animated';
+import { selectImage } from './utils/imagePicker';
 import { AnimatedWrapper } from './wrappers/AnimatedWrapper';
 
 const Animated = loadAnimated();
@@ -17,6 +24,7 @@ function _Footer(props: IFooterProps) {
   const [message, setMessage] = useState<string>('');
   const [mentions] = useState(['JohnDoe']);
   const [foundedMentions, setFoundedMentions] = useState<string[]>([]);
+  const [image, setImage] = useState<IMedia[]>([]);
 
   const cuttedText = useMemo(() => {
     if (props.replyingTo) {
@@ -56,9 +64,11 @@ function _Footer(props: IFooterProps) {
     props.onPressSend({
       text: message,
       repliedTo: props.replyingTo,
+      media: image,
     });
     setMessage('');
-  }, [message, props]);
+    setImage([]);
+  }, [message, props, image]);
 
   const onPressMention = (target: string) => {
     setMessage((prev) => {
@@ -113,8 +123,24 @@ function _Footer(props: IFooterProps) {
     }
   }, []);
 
+  const onPressImage = useCallback(async () => {
+    selectImage().then((r) =>
+      setImage((prev) =>
+        prev.concat({
+          uri: r.uri,
+          base64: r.base64,
+          type: MediaType.Image,
+        })
+      )
+    );
+  }, []);
+
   return (
-    <View>
+    <View
+      style={
+        image && { position: 'absolute', bottom: -100, backgroundColor: '#fff' }
+      }
+    >
       {props.replyingTo && (
         <AnimatedWrapper
           entering={FadeInDown}
@@ -140,20 +166,63 @@ function _Footer(props: IFooterProps) {
       {renderMenu()}
 
       <View style={[styles.container, props.containerStyle]}>
-        <TextInput
-          value={props.value ?? message}
-          onChangeText={onChangeText}
-          style={[styles.textInput, props?.inputStyle]}
-          placeholder={props?.placeholder ?? 'Type a message...'}
-          onKeyPress={(e) => onKeyPress(e.nativeEvent.key)}
-        />
-        {props?.sendButton ? (
-          props.sendButton({
-            onPressSend: onPressSend,
-          })
-        ) : (
-          <Button title="Send" onPress={onPressSend} color="#0084ff" />
+        {image.length > 0 && (
+          <ScrollView horizontal pagingEnabled>
+            {image.map((_image) => (
+              <TouchableOpacity
+                onPress={() =>
+                  setImage((prev) => prev.filter((v) => v !== _image))
+                }
+                style={styles.media}
+              >
+                <ImageBackground
+                  style={[styles.mediaOverlay, { marginBottom: 15 }]}
+                  source={{ uri: _image.uri }}
+                  imageStyle={{
+                    borderRadius: 15,
+                  }}
+                >
+                  <View style={styles.media}>
+                    <View style={styles.imageClearButton}>
+                      <Text style={{ color: '#fff', textAlign: 'center' }}>
+                        x
+                      </Text>
+                    </View>
+                  </View>
+                </ImageBackground>
+              </TouchableOpacity>
+            ))}
+
+            <TouchableOpacity onPress={onPressImage}>
+              <View style={styles.addMore}>
+                <Text style={{ fontSize: 20, color: '#ccc' }}>+</Text>
+              </View>
+            </TouchableOpacity>
+          </ScrollView>
         )}
+
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <TextInput
+            value={props.value ?? message}
+            onChangeText={onChangeText}
+            style={[styles.textInput, props?.inputStyle]}
+            placeholder={props?.placeholder ?? 'Type a message...'}
+            onKeyPress={(e) => onKeyPress(e.nativeEvent.key)}
+          />
+          <View style={{ position: 'absolute', right: 80 }}>
+            <TouchableOpacity onPress={onPressImage}>
+              <Text style={{ fontSize: 20 }}>📷</Text>
+            </TouchableOpacity>
+          </View>
+
+          {props?.sendButton ? (
+            props.sendButton({
+              onPressSend: onPressSend,
+            })
+          ) : (
+            <Button title="Send" onPress={onPressSend} color="#0084ff" />
+          )}
+        </View>
       </View>
     </View>
   );
@@ -161,7 +230,6 @@ function _Footer(props: IFooterProps) {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
     padding: 10,
   },
   textInput: {
@@ -186,6 +254,41 @@ const styles = StyleSheet.create({
   },
   replyUsername: {
     fontWeight: 'bold',
+  },
+
+  addMore: {
+    width: 100,
+    height: 100,
+    borderWidth: 1,
+    borderStyle: 'dashed',
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: '#ccc',
+  },
+  imageClearButton: {
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    width: 18,
+    height: 18,
+    marginLeft: 10,
+    marginTop: 5,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+  },
+  media: {
+    width: 110,
+    height: 100,
+    borderRadius: 15,
+    marginRight: 10,
+    marginBottom: 10,
+  },
+  mediaOverlay: {
+    width: 100,
+    height: 100,
+    backgroundColor: 'rgba(0,0,0,0.2)',
+    borderRadius: 15,
   },
 });
 
