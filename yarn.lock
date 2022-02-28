@@ -7940,7 +7940,7 @@ prop-types@15.5.8:
   dependencies:
     fbjs "^0.8.9"
 
-prop-types@^15.5.10, prop-types@^15.6.2, prop-types@^15.7.0, prop-types@^15.7.2, prop-types@^15.7.x:
+prop-types@^15.5.10, prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.7.x:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -8147,26 +8147,12 @@ react-native-keyboard-aware-scroll-view@^0.9.5:
     prop-types "^15.6.2"
     react-native-iphone-x-helper "^1.0.3"
 
-react-native-lightbox-v2@^0.8.8:
-  version "0.8.8"
-  resolved "https://registry.yarnpkg.com/react-native-lightbox-v2/-/react-native-lightbox-v2-0.8.8.tgz#20dd9a0231fdbd0cde111bfcc6d3844f6d9f6f9e"
-  integrity sha512-Cgonl9A+b78yvVc9voU5763U3N5px7EAeSnM9u78pCg4z1lwPWqKzWkwZx/K0wTMDSfqav4Iizk6enMuUdgg/A==
-  dependencies:
-    prop-types "^15.7.2"
-
 react-native-parsed-text@^0.0.22:
   version "0.0.22"
   resolved "https://registry.yarnpkg.com/react-native-parsed-text/-/react-native-parsed-text-0.0.22.tgz#a23c756eaa5d6724296814755085127f9072e5f5"
   integrity sha512-hfD83RDXZf9Fvth3DowR7j65fMnlqM9PpxZBGWkzVcUTFtqe6/yPcIoIAgrJbKn6YmtzkivmhWE2MCE4JKBXrQ==
   dependencies:
     prop-types "^15.7.x"
-
-react-native-photo-view-ex@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/react-native-photo-view-ex/-/react-native-photo-view-ex-1.1.0.tgz#9147d519ecd7cb1735272cf30eef3ba89248933e"
-  integrity sha512-g98Ao3eH1kzv52BE4o49keUA8GK4PHdb+3AGLymZF1k3YZVEH3YoKpPpZMuyOGfHdxHk+OO5/dmfC+3u9zLAVA==
-  dependencies:
-    prop-types "^15.7.0"
 
 react-native-reanimated@^2.4.1:
   version "2.4.1"
