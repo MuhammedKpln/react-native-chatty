@@ -109,7 +109,7 @@ export interface IFooterProps extends Pick<IChatty, 'replyingTo'> {
     labelStyle?: TextStyle;
     usernameStyle?: TextStyle;
   };
-  renderImageAction: (props: { onPressImage: () => void }) => JSX.Element;
+  renderImageAction?: (props: { onPressImage: () => void }) => JSX.Element;
 }
 
 export interface ListRef {
