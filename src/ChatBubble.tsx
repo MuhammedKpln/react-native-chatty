@@ -303,12 +303,14 @@ function _ChatBubble(props: IChatBubble) {
             </TouchableOpacity>
           )}
 
-          <PhotoView
-            images={message?.media}
-            imageIndex={0}
-            visible={showMedia}
-            onRequestClose={() => setShowMedia(false)}
-          />
+          {PhotoView && (
+            <PhotoView
+              images={message?.media}
+              imageIndex={0}
+              visible={showMedia}
+              onRequestClose={() => setShowMedia(false)}
+            />
+          )}
         </View>
       );
     }
