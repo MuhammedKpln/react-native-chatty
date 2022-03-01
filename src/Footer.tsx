@@ -126,20 +126,19 @@ function _Footer(props: IFooterProps) {
   }, []);
 
   const onPressImage = useCallback(async () => {
-    selectImage().then((r) =>
-      setImage((prev) => {
-        if (prev) {
-          prev.concat({
-            uri: r.uri,
-            base64: r.base64,
-            type: MediaType.Image,
-          });
-        }
-
-        return prev;
-      })
-    );
-  }, []);
+    selectImage().then((r) => {
+      const assets = {
+        type: MediaType.Image,
+        uri: r?.assets[0].uri ?? r.uri,
+        base64: r?.assets[0].base64 ?? r.base64,
+      };
+      if (image) {
+        setImage([...image, assets]);
+      } else {
+        setImage([assets]);
+      }
+    });
+  }, [image]);
 
   return (
     <View

@@ -1,9 +1,7 @@
 let imagePicker: any;
-let isExpo: boolean = false;
 
 try {
   imagePicker = require('expo-image-picker');
-  isExpo = true;
 } catch {
   try {
     imagePicker = require('react-native-image-picker');
@@ -15,7 +13,7 @@ try {
 }
 
 export async function selectImage() {
-  if (isExpo) {
+  if (imagePicker?.launchImageLibraryAsync) {
     return await imagePicker.launchImageLibraryAsync({
       base64: true,
     });
