@@ -2,12 +2,17 @@
 
 💬 Full-featured high performance chat UI for React Native.
 
+
 ## Demo
 
 With and without customizations:
-<p align="center">
-  <img src="https://i.imgur.com/k7G9Yog.png" width="250" title="hover text">
-</p>
+
+caption1 | caption2
+:-: | :-:
+<img src="https://i.imgur.com/k7G9Yog.png" width="250" title="hover text"> | <video src="https://user-images.githubusercontent.com/17166855/156153084-f111fd20-f89e-41fd-b3bd-5b4e1be81b47.mp4"  width="250" />
+  
+
+
 
 
 [Check out Expo snack (For better results, try on real devices.)](https://snack.expo.dev/@muhammedkpln/react-native-chatty-example)
