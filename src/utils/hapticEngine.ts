@@ -47,10 +47,9 @@ try {
       }
     };
   } catch (error) {
-    console.warn(
-      'Haptic engine not found, please install react-native-haptic-feedback'
-    );
+    console.warn('Haptic engine not found');
   }
+  console.warn('Haptic engine not found');
 }
 
 export { triggerHaptic };
