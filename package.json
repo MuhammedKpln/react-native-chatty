@@ -1,6 +1,6 @@
 {
   "name": "react-native-chatty",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "description": "React native chatty",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
