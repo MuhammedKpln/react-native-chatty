@@ -8,7 +8,6 @@ import {
   View,
 } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
-import string from 'string-similarity';
 import { PropsContext } from './Chatty';
 import { IFooterProps, IMedia, MediaType } from './types/Chatty.types';
 import { loadAnimated } from './utils/animated';
@@ -36,26 +35,27 @@ function _Footer(props: IFooterProps) {
 
   const onChangeText = useCallback(
     (text: string) => {
-      setMessage(text);
-
       const foundedMentions: string[] = [];
 
+      // Iterate over all text
       text.split(' ').forEach((word) => {
-        const bestMatches = string.findBestMatch(
-          word.replace('@', ''),
-          mentions
+        foundedMentions.push(
+          // Check and push if word exists in mentions
+          ...mentions.filter((mention) => {
+            console.log(text, mention.indexOf(word));
+            return (
+              mention
+                .toLowerCase()
+                .indexOf(word.toLowerCase().replace('@', '')) != -1
+            );
+          })
         );
-
-        bestMatches.ratings.forEach((rating) => {
-          if (rating.rating > 0.3) {
-            foundedMentions.push(rating.target);
-          }
-        });
       });
 
       setFoundedMentions(foundedMentions);
 
       props.onChangeText(text);
+      setMessage(text);
     },
     [props, mentions]
   );
@@ -76,9 +76,7 @@ function _Footer(props: IFooterProps) {
       const lastMessageIndex = messagesArray.length - 1;
       const lastMessage = messagesArray[lastMessageIndex];
 
-      if (string.compareTwoStrings(lastMessage, target) > 0.3) {
-        prev = prev.replace(lastMessage, '@' + target);
-      }
+      prev = prev.replace(lastMessage, '@' + target);
 
       return prev;
     });
@@ -100,13 +98,14 @@ function _Footer(props: IFooterProps) {
               bottom: 50,
               width: '100%',
               padding: 10,
-              backgroundColor: '#ccc',
+              backgroundColor: '#E5EEFA',
             }}
           >
-            <Text style={{ fontSize: 17 }}>Mentions</Text>
             {foundedMentions.map((mention) => (
               <TouchableOpacity onPress={() => onPressMention(mention)}>
-                <Text style={{ padding: 10 }}>{mention}</Text>
+                <Text style={{ padding: 10, color: '#1939B7' }}>
+                  @{mention}
+                </Text>
               </TouchableOpacity>
             ))}
           </Animated.View>
