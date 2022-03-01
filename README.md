@@ -22,8 +22,9 @@ With and without customizations:
 - Scroll to bottom
 - Haptic feedback on new message
 - Hashtag, mention and url is parsed optionally, or even use ur **own** logic.
-- **Actions** via [iOS context menu(fallback to actionsheet if not available)](https://developer.apple.com/design/human-interface-guidelines/ios/controls/context-menus/) 
+- **Actions** via [iOS context menu(fallback to actionsheet if not available)](https://developer.apple.com/design/human-interface-guidelines/ios/controls/context-menus/)
 - Mention **directly from input** by typing @mention
+- **Upload/View image** support.
 
 
 ## Installation
