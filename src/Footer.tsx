@@ -24,7 +24,7 @@ function _Footer(props: IFooterProps) {
   const [message, setMessage] = useState<string>('');
   const [mentions] = useState(['JohnDoe']);
   const [foundedMentions, setFoundedMentions] = useState<string[]>([]);
-  const [image, setImage] = useState<IMedia[]>([]);
+  const [image, setImage] = useState<IMedia[] | undefined>();
 
   const cuttedText = useMemo(() => {
     if (props.replyingTo) {
@@ -125,19 +125,24 @@ function _Footer(props: IFooterProps) {
 
   const onPressImage = useCallback(async () => {
     selectImage().then((r) =>
-      setImage((prev) =>
-        prev.concat({
-          uri: r.uri,
-          base64: r.base64,
-          type: MediaType.Image,
-        })
-      )
+      setImage((prev) => {
+        if (prev) {
+          prev.concat({
+            uri: r.uri,
+            base64: r.base64,
+            type: MediaType.Image,
+          });
+        }
+
+        return prev;
+      })
     );
   }, []);
 
   return (
     <View
       style={
+        image &&
         image.length > 0 && {
           position: 'absolute',
           bottom: -100,
@@ -170,12 +175,12 @@ function _Footer(props: IFooterProps) {
       {renderMenu()}
 
       <View style={[styles.container, props.containerStyle]}>
-        {image.length > 0 && (
+        {image && image.length > 0 && (
           <ScrollView horizontal pagingEnabled>
             {image.map((_image) => (
               <TouchableOpacity
                 onPress={() =>
-                  setImage((prev) => prev.filter((v) => v !== _image))
+                  setImage((prev) => prev && prev.filter((v) => v !== _image))
                 }
                 style={styles.media}
               >
