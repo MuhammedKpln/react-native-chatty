@@ -109,6 +109,10 @@ export interface IFooterProps extends Pick<IChatty, 'replyingTo'> {
     labelStyle?: TextStyle;
     usernameStyle?: TextStyle;
   };
+  mentionStyles?: {
+    containerStyle?: ViewStyle;
+    labelStyle?: TextStyle;
+  };
   renderImageAction?: (props: { onPressImage: () => void }) => JSX.Element;
 }
 

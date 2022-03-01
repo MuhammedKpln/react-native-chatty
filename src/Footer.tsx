@@ -93,17 +93,15 @@ function _Footer(props: IFooterProps) {
           <Animated.View
             entering={FadeInDown}
             exiting={FadeOutDown}
-            style={{
-              position: 'absolute',
-              bottom: 50,
-              width: '100%',
-              padding: 10,
-              backgroundColor: '#E5EEFA',
-            }}
+            style={
+              props.mentionStyles?.containerStyle ?? styles.mentionContainer
+            }
           >
             {foundedMentions.map((mention) => (
               <TouchableOpacity onPress={() => onPressMention(mention)}>
-                <Text style={{ padding: 10, color: '#1939B7' }}>
+                <Text
+                  style={props.mentionStyles?.labelStyle ?? styles.mentionLabel}
+                >
                   @{mention}
                 </Text>
               </TouchableOpacity>
@@ -114,7 +112,12 @@ function _Footer(props: IFooterProps) {
     }
 
     return null;
-  }, [foundedMentions, message]);
+  }, [
+    foundedMentions,
+    message,
+    props.mentionStyles?.containerStyle,
+    props.mentionStyles?.labelStyle,
+  ]);
 
   const onKeyPress = useCallback((key: string) => {
     if (key === ' ') {
@@ -306,6 +309,17 @@ const styles = StyleSheet.create({
     height: 100,
     backgroundColor: 'rgba(0,0,0,0.2)',
     borderRadius: 15,
+  },
+  mentionContainer: {
+    position: 'absolute',
+    bottom: 50,
+    width: '100%',
+    padding: 10,
+    backgroundColor: '#E5EEFA',
+  },
+  mentionLabel: {
+    padding: 10,
+    color: '#1939B7',
   },
 });
 
