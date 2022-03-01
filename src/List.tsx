@@ -36,7 +36,7 @@ import {
   ListRef,
 } from './types/Chatty.types';
 import { loadAnimated } from './utils/animated';
-import { hapticEngine, triggerHaptic } from './utils/hapticEngine';
+import { hapticEngine } from './utils/hapticEngine';
 import { wait } from './utils/wait';
 import { AnimatedWrapper } from './wrappers/AnimatedWrapper';
 
