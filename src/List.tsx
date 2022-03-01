@@ -36,6 +36,7 @@ import {
   ListRef,
 } from './types/Chatty.types';
 import { loadAnimated } from './utils/animated';
+import { hapticEngine, triggerHaptic } from './utils/hapticEngine';
 import { wait } from './utils/wait';
 import { AnimatedWrapper } from './wrappers/AnimatedWrapper';
 
@@ -126,7 +127,8 @@ export const List = React.forwardRef(
 
           if (!Array.isArray(message)) {
             if (!message.me && propsContext?.enableHapticFeedback) {
-              if (Platform.OS !== 'web') trigger(HapticType.Heavy);
+              if (Platform.OS !== 'web' && hapticEngine)
+                trigger(HapticType.Heavy);
             }
           }
         },

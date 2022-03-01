@@ -52,4 +52,4 @@ try {
   console.warn('Haptic engine not found');
 }
 
-export { triggerHaptic };
+export { triggerHaptic, hapticEngine };
