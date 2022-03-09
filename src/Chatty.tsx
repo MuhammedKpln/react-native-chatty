@@ -9,6 +9,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Footer } from './Footer';
 import { Header } from './Header';
 import { List } from './List';
@@ -54,43 +55,48 @@ export const Chatty = React.forwardRef(
     }, []);
 
     return (
-      <PropsContext.Provider value={props}>
-        {props?.renderHeader ? (
-          props.renderHeader(props.headerProps)
-        ) : (
-          <Header {...props.headerProps} />
-        )}
-        <KeyboardAvoidingView
-          behavior={Platform.select({
-            android: 'height',
-            ios: 'position',
-          })}
-          keyboardVerticalOffset={Platform.select({
-            android: 30,
-          })}
-        >
-          {props.messages.length < 1 ? (
-            renderLoading()
+      <SafeAreaView>
+        <PropsContext.Provider value={props}>
+          {props?.renderHeader ? (
+            props.renderHeader(props.headerProps)
           ) : (
-            <>
-              <List
-                data={messages}
-                //@ts-ignore
-                ref={ref ?? listRef}
-                rowRenderer={
-                  props?.renderBubble ? props.renderBubble : undefined
-                }
-                {...props.listProps}
-              />
-              {props?.renderFooter ? (
-                props.renderFooter(props.footerProps)
-              ) : (
-                <Footer {...props.footerProps} replyingTo={props.replyingTo} />
-              )}
-            </>
+            <Header {...props.headerProps} />
           )}
-        </KeyboardAvoidingView>
-      </PropsContext.Provider>
+          <KeyboardAvoidingView
+            behavior={Platform.select({
+              android: 'position',
+              ios: 'position',
+            })}
+            keyboardVerticalOffset={Platform.select({
+              android: 20,
+            })}
+          >
+            {props.messages.length < 1 ? (
+              renderLoading()
+            ) : (
+              <>
+                <List
+                  data={messages}
+                  //@ts-ignore
+                  ref={ref ?? listRef}
+                  rowRenderer={
+                    props?.renderBubble ? props.renderBubble : undefined
+                  }
+                  {...props.listProps}
+                />
+                {props?.renderFooter ? (
+                  props.renderFooter(props.footerProps)
+                ) : (
+                  <Footer
+                    {...props.footerProps}
+                    replyingTo={props.replyingTo}
+                  />
+                )}
+              </>
+            )}
+          </KeyboardAvoidingView>
+        </PropsContext.Provider>
+      </SafeAreaView>
     );
   }
 );
