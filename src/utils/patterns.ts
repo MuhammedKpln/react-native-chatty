@@ -6,9 +6,8 @@ export function loadParsedText() {
 
     return ReactNativeParsedText;
   } catch (err) {
-    console.error(err);
     console.warn(
-      "Couldn't load react-native-parsed-text and eventemitter3, please install it if you want to use the pattern feature"
+      "Couldn't load react-native-parsed-text, please install it if you want to use the pattern feature"
     );
   }
 }
