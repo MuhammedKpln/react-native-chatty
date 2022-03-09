@@ -1,6 +1,6 @@
 export const loadLottie = () => {
   try {
-    const LottieView = require('lottie-react-native').default;
+    const LottieView = require('lottie-react-native');
 
     return LottieView;
   } catch (error) {
