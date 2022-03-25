@@ -304,7 +304,7 @@ export const List = React.forwardRef(
                   onReply={propsContext.onReply}
                 />
               ) : (
-                <ChatBubble message={data} blink={true} />
+                <ChatBubble message={data} />
               )}
             </AnimatedWrapper>
           </View>
