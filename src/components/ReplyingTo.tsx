@@ -1,21 +1,33 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { ChatBubbleEmitter } from '../utils/eventEmitter';
 
-function _ReplyingTo(props: { username: string; text: string }) {
-  const { username, text } = props;
+function _ReplyingTo(props: {
+  username: string;
+  text: string;
+  messageId: number;
+}) {
+  const { username, text, messageId } = props;
 
   const cuttedText = useMemo(() => {
     return text.slice(0, 100) + '...';
   }, [text]);
 
+  const onPressChatBubble = useCallback(() => {
+    ChatBubbleEmitter.emit('replyBubblePressed', messageId);
+  }, [messageId]);
+
   return (
-    <View style={styles.reply}>
-      <View style={styles.replyBody}>
-        <Text style={styles.replyUsername}>{username}</Text>
-        <Text>{cuttedText}</Text>
+    <TouchableWithoutFeedback onPress={onPressChatBubble}>
+      <View style={styles.reply}>
+        <View style={styles.replyBody}>
+          <Text style={styles.replyUsername}>{username}</Text>
+          <Text>{cuttedText}</Text>
+        </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 

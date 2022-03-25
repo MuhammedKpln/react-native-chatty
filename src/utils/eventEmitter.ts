@@ -11,6 +11,11 @@ type ChatEvents = {
   actionPressed: (index: number, message: IMessage) => void;
 };
 
-const ChatEmitter = new EventEmitter() as TypedEmitter<ChatEvents>;
+type ChatBubbleEvents = {
+  replyBubblePressed: (messageId: number) => void;
+};
 
-export { ChatEmitter };
+const ChatEmitter = new EventEmitter() as TypedEmitter<ChatEvents>;
+const ChatBubbleEmitter = new EventEmitter() as TypedEmitter<ChatBubbleEvents>;
+
+export { ChatEmitter, ChatBubbleEmitter };

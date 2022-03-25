@@ -6,9 +6,10 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { Dimensions, ImageBackground } from 'react-native';
 import {
+  Dimensions,
   Image,
+  ImageBackground,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -350,10 +351,11 @@ function _ChatBubble(props: IChatBubble) {
                 <ReplyingTo
                   username={message?.repliedTo?.user.username}
                   text={message?.repliedTo.text}
+                  messageId={message?.repliedTo.id}
                 />
               )}
 
-              {propsContext.enablePatterns && ParsedText ? (
+              {propsContext?.enablePatterns && ParsedText ? (
                 <>
                   {renderMedia()}
                   <ParsedText

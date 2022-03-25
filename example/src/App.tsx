@@ -107,6 +107,17 @@ export default function App() {
         username: 'Jane Doe',
         avatar: { uri: 'https://i.pravatar.cc/300' },
       },
+      repliedTo: {
+        id: 1,
+        text: 'Hello',
+        me: true,
+        createdAt: new Date(),
+        user: {
+          id: 1,
+          username: 'John Doe',
+          avatar: { uri: 'https://i.pravatar.cc/300' },
+        },
+      },
     },
   ]);
 

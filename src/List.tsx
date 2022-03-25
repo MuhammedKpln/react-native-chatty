@@ -36,6 +36,7 @@ import {
   ListRef,
 } from './types/Chatty.types';
 import { loadAnimated } from './utils/animated';
+import { ChatBubbleEmitter } from './utils/eventEmitter';
 import { hapticEngine } from './utils/hapticEngine';
 import { wait } from './utils/wait';
 import { AnimatedWrapper } from './wrappers/AnimatedWrapper';
@@ -89,6 +90,23 @@ export const List = React.forwardRef(
     useEffect(() => {
       setMessages(dataProvider.cloneWithRows(data));
     }, [data, dataProvider]);
+
+    useEffect(() => {
+      // When reply is pressed, scroll to replied message
+      ChatBubbleEmitter.addListener('replyBubblePressed', (messageId) => {
+        const index = messages
+          .getAllData()
+          .findIndex((m) => m.id === messageId);
+
+        if (index !== -1) {
+          recyclerlistviewRef.current?.scrollToIndex(index, true);
+        }
+      });
+
+      return () => {
+        ChatBubbleEmitter.removeAllListeners();
+      };
+    }, [messages]);
 
     useImperativeHandle(
       ref,
@@ -286,7 +304,7 @@ export const List = React.forwardRef(
                   onReply={propsContext.onReply}
                 />
               ) : (
-                <ChatBubble message={data} />
+                <ChatBubble message={data} blink={true} />
               )}
             </AnimatedWrapper>
           </View>
