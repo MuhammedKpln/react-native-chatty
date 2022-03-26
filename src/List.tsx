@@ -37,7 +37,7 @@ import {
 } from './types/Chatty.types';
 import { ChatBubbleEmitter } from './utils/eventEmitter';
 import { hapticEngine } from './utils/hapticEngine';
-import { wait } from './utils/wait';
+import { wait } from './utils/helpers';
 
 const ScrollViewWithHeader = React.forwardRef(
   ({ children, ...props }, ref: Ref<ScrollView>) => {
