@@ -8,8 +8,8 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const config = {
   title: 'React Native Chatty',
   tagline: 'Full-featured high performance chat UI for React Native.',
-  url: 'https://react-native-chatty.github.io',
-  baseUrl: '/',
+  url: 'https://muhammedkpln.github.io/react-native-chatty',
+  baseUrl: '/react-native-chatty/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
@@ -44,9 +44,9 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: {
-        title: 'My Site',
+        title: 'React Native Chatty',
         logo: {
-          alt: 'My Site Logo',
+          alt: 'React Native Chatty - Chat UI for React Native',
           src: 'img/logo.svg',
         },
         items: [
