@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkdocs=self.webpackChunkdocs||[]).push([[67],{7349:function(a){a.exports=JSON.parse('{"allTagsPath":"/react-native-chatty/blog/tags","name":"hello","count":2,"permalink":"/react-native-chatty/blog/tags/hello"}')}}]);
