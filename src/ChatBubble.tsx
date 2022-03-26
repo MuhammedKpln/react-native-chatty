@@ -40,7 +40,7 @@ import { ContextMenuWrapper } from './wrappers/ContextMenuWrapper';
 const ParsedText = loadParsedText();
 
 function _ChatBubble(props: IChatBubble) {
-  const { message, customContent } = props;
+  const { message, children } = props;
   const propsContext = useContext(PropsContext);
   const [mediaLoaded, setMediaLoaded] = useState<boolean>(false);
   const [showMedia, setShowMedia] = useState<boolean>(false);
@@ -343,8 +343,8 @@ function _ChatBubble(props: IChatBubble) {
             { padding: message?.repliedTo ? 5 : 15 },
           ]}
         >
-          {customContent ? (
-            customContent
+          {children ? (
+            children
           ) : (
             <>
               {message?.repliedTo && (

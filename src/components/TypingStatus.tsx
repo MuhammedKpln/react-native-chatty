@@ -36,15 +36,13 @@ function _TypingStatus(_: any, ref: Ref<ITypingStatusRef>) {
     }
 
     return (
-      <ChatBubble
-        customContent={
-          <LottieView
-            source={require('../assets/lottie/typing.json')}
-            autoPlay
-            style={{ width: 30 }}
-          />
-        }
-      />
+      <ChatBubble>
+        <LottieView
+          source={require('../assets/lottie/typing.json')}
+          autoPlay
+          style={{ width: 30 }}
+        />
+      </ChatBubble>
     );
   } else {
     if (propsContext?.renderTypingBubble) {
