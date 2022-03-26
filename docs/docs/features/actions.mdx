@@ -1,0 +1,98 @@
+# Bubble actions
+
+
+![Actions](/img/actions.gif)
+
+In order to get actions working, you'll need to install native modules.
+
+
+
+## Install native dependencies
+
+`npm i react-native-context-menu-view`
+
+
+:::warning
+Do not forget to run `pod install` after installations.
+:::
+
+
+## Usage
+
+
+```jsx
+import React, { useState, useEffect } from 'react';
+import { Chatty, ChatEmitter } from 'react-native-chatty';
+
+export default function MyReactPage() {
+  const [messages, setMessages] = useState()
+  const text = useRef()
+
+  useEffect(() => {
+
+    // Register action onPress handler
+    ChatEmitter.addListener('actionPressed', (index, message) => {
+      switch (index) {
+        case 0:
+          showToast(ToastStatus.Success, 'Message copied.')
+          break
+        case 1:
+          showToast(ToastStatus.Success, 'Message Removed.')
+          break
+      }
+    })
+
+    return () => {
+      ChatEmitter.removeAllListeners()
+    }
+  }, [props])
+
+  const onPressSend = (data) => {
+    // Implement
+
+    socket.send(data)
+  }
+
+  return (
+    <Chatty
+      messages={messages}
+      headerProps={{
+        id: 0,
+        username: "Muhammed Kaplan",
+        avatar: {
+          uri: "https://blalala.com"
+        }
+      }}
+      footerProps={{
+        // To prevent any unnecessary re-rendering, we're using ref instead of states.
+        onChangeText: (_text) => text.current = _text,
+        onPressSend
+      }}
+      bubbleProps={{
+        // Setup UI part of the application, there is no onPress prop available.
+        // You'll handle it by ChatEmitter, see example above.
+        actions: {
+            options: [
+              {
+                title: 'Copy message',
+                systemIcon: 'doc.on.doc',
+              },
+              {
+                title: 'Remove message',
+                systemIcon: 'trash',
+                destructive: true,
+              },
+            ],
+            cancelButtonLabel: 'Cancel',
+          },
+       }}
+    />
+  );
+}
+```
+
+
+
+
+
+
