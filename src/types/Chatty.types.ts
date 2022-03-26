@@ -60,7 +60,6 @@ export interface IListProps
 
 export interface IChatBubble {
   message?: IMessage;
-  customContent?: JSX.Element;
   containerStyle?: ViewStyle;
   selfBubbleColor?: string;
   otherBubbleColor?: string;
@@ -72,6 +71,7 @@ export interface IChatBubble {
   tickProps?: ITickProps;
   actions?: IActionProps;
   enableCornerRounding?: boolean;
+  children?: JSX.Element;
 }
 
 export interface IShowAvatarProps {
@@ -213,4 +213,11 @@ export interface IMedia {
   uri: string;
   base64?: string;
   type: MediaType;
+}
+
+export interface IUrlPreviewBubble {
+  title: string;
+  image: string;
+  description: string;
+  url: string;
 }

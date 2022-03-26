@@ -10,6 +10,7 @@ import {
   Dimensions,
   Image,
   ImageBackground,
+  InteractionManager,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -18,13 +19,16 @@ import {
 } from 'react-native';
 import { PropsContext } from './Chatty';
 import { ReplyingTo } from './components/ReplyingTo';
+import { UrlPreviewBubble } from './components/UrlPreviewBubble';
 import {
   IChatBubble,
   IMessage,
+  IUrlPreviewBubble,
   MediaType,
   MessageStatus,
 } from './types/Chatty.types';
 import { ChatEmitter } from './utils/eventEmitter';
+import { extractUrlFromString, fetchMetaData } from './utils/helpers';
 import { Skeleton } from './utils/moti';
 import {
   ALL_PATERNS_SHAPES,
@@ -44,6 +48,8 @@ function _ChatBubble(props: IChatBubble) {
   const propsContext = useContext(PropsContext);
   const [mediaLoaded, setMediaLoaded] = useState<boolean>(false);
   const [showMedia, setShowMedia] = useState<boolean>(false);
+  const [showUrlPreview, setShowUrlPreview] = useState(false);
+  const [urlPreviewData, setUrlPreviewData] = useState<IUrlPreviewBubble>();
   const createdAt = useMemo(() => {
     return message && dayjs(message.createdAt).format('HH:mm');
   }, [message]);
@@ -107,13 +113,28 @@ function _ChatBubble(props: IChatBubble) {
     if (message?.media) {
       message.media.forEach((media) => {
         if (media.type === MediaType.Image) {
-          Image.prefetch(media.uri).then(() => {
-            setMediaLoaded(true);
+          InteractionManager.runAfterInteractions(() => {
+            Image.prefetch(media.uri).then(() => {
+              setMediaLoaded(true);
+            });
           });
         }
       });
     }
-  }, [message?.media]);
+
+    InteractionManager.runAfterInteractions(async () => {
+      const url = extractUrlFromString(message?.text ?? '');
+
+      if (url) {
+        const data = await fetchMetaData(url);
+
+        if (data) {
+          setShowUrlPreview(true);
+          setUrlPreviewData(data);
+        }
+      }
+    });
+  }, [message?.media, message?.text]);
 
   const onPressPattern = useCallback(
     (pattern: string, index: number) => {
@@ -319,6 +340,23 @@ function _ChatBubble(props: IChatBubble) {
     return null;
   }, [mediaLoaded, message, showMedia]);
 
+  const renderUrlPreview = useMemo(() => {
+    if (showUrlPreview && urlPreviewData && !message?.repliedTo) {
+      return (
+        <View style={{ marginTop: 10 }}>
+          <UrlPreviewBubble
+            title={urlPreviewData.title}
+            description={urlPreviewData.description}
+            image={urlPreviewData.image}
+            url={urlPreviewData.url}
+          />
+        </View>
+      );
+    }
+
+    return null;
+  }, [message?.repliedTo, showUrlPreview, urlPreviewData]);
+
   return (
     <View style={[styles.wrapper, bubbleAlignment]}>
       {propsContext.bubbleProps?.trailingAccessory && message?.me && (
@@ -358,6 +396,7 @@ function _ChatBubble(props: IChatBubble) {
               {propsContext?.enablePatterns && ParsedText ? (
                 <>
                   {renderMedia()}
+
                   <ParsedText
                     parse={messagePatterns}
                     style={
@@ -367,11 +406,13 @@ function _ChatBubble(props: IChatBubble) {
                   >
                     {message?.text}
                   </ParsedText>
+                  {renderUrlPreview}
                   {renderFooter()}
                 </>
               ) : (
                 <View>
                   {renderMedia()}
+
                   <Text
                     style={
                       propsContext?.bubbleProps?.labelStyle &&
@@ -380,6 +421,7 @@ function _ChatBubble(props: IChatBubble) {
                   >
                     {message?.text}
                   </Text>
+                  {renderUrlPreview}
                   {renderFooter()}
                 </View>
               )}

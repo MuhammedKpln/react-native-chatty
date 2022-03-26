@@ -286,7 +286,7 @@ export const List = React.forwardRef(
         }
 
         return (
-          <View>
+          <View style={{ width: '100%' }}>
             {withDate && (
               <RenderDate
                 date={data.createdAt}
@@ -295,10 +295,12 @@ export const List = React.forwardRef(
             )}
             <Animated.View entering={FadeInDown} exiting={FadeOutUp}>
               {propsContext.onReply ? (
-                <SwipeableBubble
-                  message={data}
-                  onReply={propsContext.onReply}
-                />
+                <>
+                  <SwipeableBubble
+                    message={data}
+                    onReply={propsContext.onReply}
+                  />
+                </>
               ) : (
                 <ChatBubble message={data} />
               )}
@@ -366,6 +368,8 @@ export const List = React.forwardRef(
           }}
           onScroll={onScroll}
           optimizeForInsertDeleteAnimations
+          forceNonDeterministicRendering
+          canChangeSize={true}
           rowRenderer={rowRenderer}
           renderFooter={() => <TypingStatus ref={typingStatusRef} />}
           onEndReached={props?.onEndReached}
