@@ -8,7 +8,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const config = {
   title: 'React Native Chatty',
   tagline: 'Full-featured high performance chat UI for React Native.',
-  url: 'https://muhammedkpln.github.io/react-native-chatty',
+  url: 'https://muhammedkpln.github.io',
   baseUrl: '/react-native-chatty/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
