@@ -1,11 +1,9 @@
 import React, { useCallback, useContext, useRef } from 'react';
 import { Text } from 'react-native';
+import { Swipeable } from 'react-native-gesture-handler';
 import { ChatBubble } from './ChatBubble';
 import { PropsContext } from './Chatty';
 import type { ISwipeableBubble } from './types/Chatty.types';
-import { loadGestureHandler } from './utils/gestureHandler';
-
-const { Swipeable } = loadGestureHandler();
 
 function _SwipeableBubble(props: ISwipeableBubble) {
   const { onReply, message, children } = props;
