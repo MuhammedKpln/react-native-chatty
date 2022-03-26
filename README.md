@@ -10,7 +10,7 @@ With and without customizations:
 caption1 | caption2
 :-: | :-:
 <img src="https://i.imgur.com/k7G9Yog.png" width="250" title="hover text"> | <video src="https://user-images.githubusercontent.com/17166855/156153084-f111fd20-f89e-41fd-b3bd-5b4e1be81b47.mp4"  width="250" />
-  
+
 
 
 
@@ -48,15 +48,16 @@ yarn add react-native-chatty
 
 ## Usage
 
+
+Head over to [Docs](https://muhammedkpln.github.io/react-native-chatty/) for more information.
+
+
+
 ```js
 import { Chatty } from "react-native-chatty";
 
 
 <Chatty messages={messages} headerProps={...} footerProps={...} />
-
-// For more information visit
-
-//https://github.com/MuhammedKpln/react-native-chatty/wiki (Pretty soon!)
 
 ```
 
