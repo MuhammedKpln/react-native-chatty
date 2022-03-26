@@ -10,7 +10,7 @@ import React, {
   useState,
 } from 'react';
 import { Platform, ScrollView, useWindowDimensions, View } from 'react-native';
-import { FadeOutUp } from 'react-native-reanimated';
+import Animated, { FadeInDown, FadeOutUp } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   DataProvider,
@@ -35,13 +35,9 @@ import {
   LayoutType,
   ListRef,
 } from './types/Chatty.types';
-import { loadAnimated } from './utils/animated';
 import { ChatBubbleEmitter } from './utils/eventEmitter';
 import { hapticEngine } from './utils/hapticEngine';
 import { wait } from './utils/wait';
-import { AnimatedWrapper } from './wrappers/AnimatedWrapper';
-
-const { FadeInDown } = loadAnimated();
 
 const ScrollViewWithHeader = React.forwardRef(
   ({ children, ...props }, ref: Ref<ScrollView>) => {
@@ -280,11 +276,11 @@ export const List = React.forwardRef(
                 />
               )}
 
-              <AnimatedWrapper entering={FadeInDown} exiting={FadeOutUp}>
+              <Animated.View entering={FadeInDown} exiting={FadeOutUp}>
                 <SwipeableBubble message={data} onReply={propsContext.onReply}>
                   {rowRendererProp(data)}
                 </SwipeableBubble>
-              </AnimatedWrapper>
+              </Animated.View>
             </View>
           );
         }
@@ -297,7 +293,7 @@ export const List = React.forwardRef(
                 {...propsContext.renderDateProps}
               />
             )}
-            <AnimatedWrapper entering={FadeInDown} exiting={FadeOutUp}>
+            <Animated.View entering={FadeInDown} exiting={FadeOutUp}>
               {propsContext.onReply ? (
                 <SwipeableBubble
                   message={data}
@@ -306,7 +302,7 @@ export const List = React.forwardRef(
               ) : (
                 <ChatBubble message={data} />
               )}
-            </AnimatedWrapper>
+            </Animated.View>
           </View>
         );
       },

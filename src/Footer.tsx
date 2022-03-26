@@ -8,15 +8,10 @@ import {
   View,
 } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import Animated, { FadeInDown, FadeOutDown } from 'react-native-reanimated';
 import { PropsContext } from './Chatty';
 import { IFooterProps, IMedia, MediaType } from './types/Chatty.types';
-import { loadAnimated } from './utils/animated';
 import { selectImage } from './utils/imagePicker';
-import { AnimatedWrapper } from './wrappers/AnimatedWrapper';
-
-const Animated = loadAnimated();
-const FadeInDown = Animated.FadeInDown;
-const FadeOutDown = Animated.FadeOutDown;
 
 function _Footer(props: IFooterProps) {
   const propsContext = useContext(PropsContext);
@@ -152,7 +147,7 @@ function _Footer(props: IFooterProps) {
       }
     >
       {props.replyingTo && (
-        <AnimatedWrapper
+        <Animated.View
           entering={FadeInDown}
           exiting={FadeOutDown}
           style={[styles.reply, props.replyStyles?.containerStyle]}
@@ -170,7 +165,7 @@ function _Footer(props: IFooterProps) {
           ) : (
             <Button title="cancel" onPress={props.onPressCancelReply} />
           )}
-        </AnimatedWrapper>
+        </Animated.View>
       )}
 
       {renderMenu()}
