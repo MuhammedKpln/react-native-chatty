@@ -122,19 +122,21 @@ function _ChatBubble(props: IChatBubble) {
       });
     }
 
-    InteractionManager.runAfterInteractions(async () => {
-      const url = extractUrlFromString(message?.text ?? '');
+    if (propsContext.enableUrlPreviews) {
+      InteractionManager.runAfterInteractions(async () => {
+        const url = extractUrlFromString(message?.text ?? '');
 
-      if (url) {
-        const data = await fetchMetaData(url);
+        if (url) {
+          const data = await fetchMetaData(url);
 
-        if (data) {
-          setShowUrlPreview(true);
-          setUrlPreviewData(data);
+          if (data) {
+            setShowUrlPreview(true);
+            setUrlPreviewData(data);
+          }
         }
-      }
-    });
-  }, [message?.media, message?.text]);
+      });
+    }
+  }, [message?.media, message?.text, propsContext.enableUrlPreviews]);
 
   const onPressPattern = useCallback(
     (pattern: string, index: number) => {

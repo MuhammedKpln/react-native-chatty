@@ -39,6 +39,7 @@ export interface IChatty {
   setDateLocale?: string | ILocale;
   listProps?: Omit<IListProps, 'rowRenderer' | 'data'>;
   enablePatterns?: boolean;
+  enableUrlPreviews?: boolean;
   patternProps?: IPatternProps;
   enableSkeletonLoader?: boolean;
   onReply?: (message: IMessage) => void;
