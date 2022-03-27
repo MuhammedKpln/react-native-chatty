@@ -124,8 +124,8 @@ function _Footer(props: IFooterProps) {
     selectImage().then((r) => {
       const assets = {
         type: MediaType.Image,
-        uri: r?.assets[0].uri ?? r.uri,
-        base64: r?.assets[0].base64 ?? r.base64,
+        uri: r?.assets ? r.assets[0].uri : r.uri,
+        base64: r?.assets ? r.assets[0].base64 : r.base64,
       };
       if (image) {
         setImage([...image, assets]);
@@ -141,7 +141,7 @@ function _Footer(props: IFooterProps) {
         image &&
         image.length > 0 && {
           position: 'absolute',
-          bottom: -100,
+          bottom: -70,
           backgroundColor: '#fff',
         }
       }
