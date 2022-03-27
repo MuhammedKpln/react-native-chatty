@@ -210,7 +210,13 @@ function _Footer(props: IFooterProps) {
           <TextInput
             value={props.value ?? message}
             onChangeText={onChangeText}
-            style={[styles.textInput, props?.inputStyle]}
+            style={[
+              propsContext?.enableImageUploads
+                ? styles.shortedTextInput
+                : styles.textInput,
+
+              props?.inputStyle,
+            ]}
             placeholder={props?.placeholder ?? 'Type a message...'}
             onKeyPress={(e) => onKeyPress(e.nativeEvent.key)}
           />
@@ -222,7 +228,10 @@ function _Footer(props: IFooterProps) {
                   onPressImage,
                 })
               ) : (
-                <TouchableOpacity onPress={onPressImage}>
+                <TouchableOpacity
+                  onPress={onPressImage}
+                  style={{ paddingHorizontal: 10 }}
+                >
                   <Text style={{ fontSize: 20 }}>📷</Text>
                 </TouchableOpacity>
               )}
@@ -249,6 +258,12 @@ const styles = StyleSheet.create({
   textInput: {
     padding: 10,
     width: '80%',
+    borderWidth: 1,
+    borderColor: '#ccc',
+  },
+  shortedTextInput: {
+    padding: 10,
+    width: '70%',
     borderWidth: 1,
     borderColor: '#ccc',
   },
