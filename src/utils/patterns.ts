@@ -37,6 +37,10 @@ export const ALL_PATERNS_SHAPES = [
   URL_PATTERN_SHAPE,
 ];
 
+/**
+ * Load all the patterns and set the onPress function
+ * @param onPress - (pattern: string, index: number) => void
+ */
 export function LoadAllPaternShapes(
   onPress: (pattern: string, index: number) => void
 ) {

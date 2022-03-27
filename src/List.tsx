@@ -83,10 +83,13 @@ export const List = React.forwardRef(
     const [messages, setMessages] = useState<DataProvider>(dataProvider);
     const previousMessages = usePrevious<DataProvider>(messages);
 
+    /* This is a React Hook that is used to update the messages list when new messages are added. */
     useEffect(() => {
       setMessages(dataProvider.cloneWithRows(data));
     }, [data, dataProvider]);
 
+    /* This code is listening to the event of a reply bubble being pressed. When it is pressed, it scrolls
+to the replied message. */
     useEffect(() => {
       // When reply is pressed, scroll to replied message
       ChatBubbleEmitter.addListener('replyBubblePressed', (messageId) => {
@@ -104,6 +107,8 @@ export const List = React.forwardRef(
       };
     }, [messages]);
 
+    /* Using the useImperativeHandle hook to expose a function to the parent component that will allow
+    it to manipulate the messages list. */
     useImperativeHandle(
       ref,
       () => ({
@@ -146,13 +151,16 @@ export const List = React.forwardRef(
             }
           }
         },
+        /* This is a function that is used to scroll to the bottom of the list. */
         scrollToEnd: (animated?: boolean) => {
           recyclerlistviewRef.current?.scrollToEnd(animated);
         },
+        /* Setting the typing status of the user. */
         setIsTyping: (typing?: boolean) => {
           typingStatusRef.current?.setIsTyping(typing ?? false);
           recyclerlistviewRef.current?.scrollToEnd(true);
         },
+        /* Removing a message from the list of messages. */
         removeMessage: (id: number) => {
           setMessages(
             dataProvider.cloneWithRows(
@@ -164,9 +172,9 @@ export const List = React.forwardRef(
       [dataProvider, messages, propsContext.enableHapticFeedback, trigger]
     );
 
+    /* This code is checking if the first message in the previous messages is the same as the first message
+in the current messages. If it is, then it will not scroll to the bottom. */
     useEffect(() => {
-      // Checks if first index of messages have same id, if it is then it will not trigger scrolling
-      // This is because the first message is the load earlier message, and we don't want to scroll to the bottom.
       if (
         previousMessages &&
         previousMessages.getAllData()![0]?.id === messages.getAllData()![0]?.id

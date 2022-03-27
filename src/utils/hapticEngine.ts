@@ -2,6 +2,8 @@ import { Platform } from 'react-native';
 import { HapticType } from '../types/Chatty.types';
 
 let hapticEngine: any;
+
+/* This is a function that returns a promise. It is used to trigger haptic feedback. */
 let triggerHaptic: (type: HapticType) => Promise<void>;
 
 try {
@@ -11,6 +13,7 @@ try {
 
   hapticEngine = require('expo-haptics');
 
+  // We're intitalizing the triggerHaptic function based on package they use.
   triggerHaptic = async (type: HapticType) => {
     switch (type) {
       case HapticType.Light:

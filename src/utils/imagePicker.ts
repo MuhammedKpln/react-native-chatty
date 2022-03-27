@@ -12,6 +12,10 @@ try {
   }
 }
 
+/**
+ * It launches the native image picker
+ * @returns The image data is being returned as a base64 string.
+ */
 export async function selectImage() {
   if (imagePicker?.launchImageLibraryAsync) {
     return await imagePicker.launchImageLibraryAsync({

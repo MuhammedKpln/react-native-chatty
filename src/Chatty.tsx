@@ -22,8 +22,8 @@ export const Chatty = React.forwardRef(
     const listRef = useRef<ListRef>();
     const { messages } = props;
 
+    /* This is a way to scroll to the end of the list when the keyboard is shown. */
     useEffect(() => {
-      // Scroll on keyboard show
       const listener = Keyboard.addListener('keyboardDidShow', () => {
         if (listRef.current) {
           listRef.current?.scrollToEnd(true);
