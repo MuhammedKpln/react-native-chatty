@@ -1,3 +1,8 @@
+# Typing animation
+
+![](/img/typing.gif)
+
+
 ## Native dependencies
 
 You will need to install `lottie-ios` and `lottie-react-native` in order to use default animation provided, otherwise it will fallback to text based typing animation.
