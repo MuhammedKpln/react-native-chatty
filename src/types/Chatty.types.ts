@@ -214,6 +214,16 @@ export interface IMedia {
   uri: string;
   base64?: string;
   type: MediaType;
+  videoOptions?: IVideoOptions;
+}
+
+export interface IVideoOptions {
+  [key: string]: any;
+  thumbnail?: string;
+  pictureInPicture?: boolean;
+  sourceHeaders?: {
+    [key: string]: any;
+  };
 }
 
 export interface IUrlPreviewBubble {

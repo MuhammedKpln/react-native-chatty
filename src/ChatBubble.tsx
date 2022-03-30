@@ -1,3 +1,4 @@
+import type { ViewSource } from '@muhammedkpln/react-native-image-viewing/dist/ImageViewing';
 import dayjs from 'dayjs';
 import React, {
   useCallback,
@@ -20,6 +21,8 @@ import {
 import { PropsContext } from './Chatty';
 import { ReplyingTo } from './components/ReplyingTo';
 import { UrlPreviewBubble } from './components/UrlPreviewBubble';
+import { Video } from './components/Video';
+import { VideoThumbnail } from './components/VideoThumbnail';
 import {
   IChatBubble,
   IMessage,
@@ -39,6 +42,7 @@ import {
   URL_PATTERN_SHAPE,
 } from './utils/patterns';
 import { PhotoView } from './utils/photoView';
+import { renderVideo } from './utils/videoRenderer';
 import { ContextMenuWrapper } from './wrappers/ContextMenuWrapper';
 
 const ParsedText = loadParsedText();
@@ -289,6 +293,26 @@ function _ChatBubble(props: IChatBubble) {
 
   const renderMedia = useCallback(() => {
     if (message?.media) {
+      const photoViewCompatible: ViewSource[] = [];
+
+      message.media.forEach((media) => {
+        if (media.type === MediaType.Image) {
+          photoViewCompatible.push({
+            type: 'image',
+            source: {
+              uri: media.uri,
+            },
+          });
+        }
+
+        if (media.type === MediaType.Video) {
+          photoViewCompatible.push({
+            type: 'view',
+            children: <Video media={media} />,
+          });
+        }
+      });
+
       return (
         <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
           {message?.media.map((media, index) => {
@@ -299,6 +323,9 @@ function _ChatBubble(props: IChatBubble) {
                     <Skeleton show={!mediaLoaded}>
                       <Image source={{ uri: media.uri }} style={styles.media} />
                     </Skeleton>
+                  )}
+                  {media.type === MediaType.Video && (
+                    <VideoThumbnail media={media} />
                   )}
                 </TouchableOpacity>
               );
@@ -329,7 +356,7 @@ function _ChatBubble(props: IChatBubble) {
 
           {PhotoView && (
             <PhotoView
-              images={message?.media}
+              views={photoViewCompatible}
               imageIndex={0}
               visible={showMedia}
               onRequestClose={() => setShowMedia(false)}
