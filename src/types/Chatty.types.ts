@@ -221,7 +221,7 @@ export interface IVideoOptions {
   [key: string]: any;
   thumbnail?: string;
   pictureInPicture?: boolean;
-  sourceHeaders?: {
+  headers?: {
     [key: string]: any;
   };
 }

@@ -1,25 +1,76 @@
-import React, { useMemo } from 'react';
-import { Image, ImageBackground, StyleSheet, View } from 'react-native';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  ActivityIndicator,
+  Image,
+  ImageBackground,
+  InteractionManager,
+  StyleSheet,
+  View,
+} from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import type { IMedia } from '../types/Chatty.types';
+import { Video } from './Video';
 
 interface IProps {
   media: IMedia;
+  isSelected?: boolean;
 }
 
-export function VideoThumbnail({ media }: IProps) {
+export function VideoThumbnail({ media, isSelected }: IProps) {
+  const [showVideo, setShowVideo] = useState<boolean>(false);
+  const [showThumbnail, setShowThumbnail] = useState(false);
   const playIcon = useMemo(() => require('../assets/icons/play.png'), []);
 
+  useEffect(() => {
+    return () => {
+      setShowVideo(false);
+    };
+  }, []);
+
+  const onPressThumbnail = useCallback(() => {
+    setShowVideo(true);
+  }, []);
+
+  useEffect(() => {
+    InteractionManager.runAfterInteractions(() => {
+      if (media?.videoOptions?.thumbnail) {
+        Image.prefetch(media?.videoOptions?.thumbnail).then(() => {
+          setShowThumbnail(true);
+        });
+      } else {
+        setShowThumbnail(true);
+      }
+    });
+  }, [media?.videoOptions?.thumbnail]);
+
+  if (showVideo) {
+    return <Video media={media} />;
+  }
+
+  if (!showThumbnail) {
+    <View style={styles.spinner}>
+      <ActivityIndicator size="small" />
+    </View>;
+  }
+
   return (
-    <ImageBackground
-      source={{
-        uri: media?.videoOptions?.thumbnail,
-      }}
-      style={styles.container}
-      imageStyle={styles.contentContainer}
+    <TouchableWithoutFeedback
+      onPress={isSelected ? onPressThumbnail : () => null}
     >
-      <View style={styles.overlay} />
-      <Image source={playIcon} style={styles.image} />
-    </ImageBackground>
+      <ImageBackground
+        source={{
+          uri: media?.videoOptions?.thumbnail,
+        }}
+        style={!isSelected ? styles.container : styles.isSelecetedContainer}
+        imageStyle={styles.contentContainer}
+      >
+        <View style={styles.overlay} />
+        <Image
+          source={playIcon}
+          style={!isSelected ? styles.image : styles.isSelectedImage}
+        />
+      </ImageBackground>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -34,12 +85,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignContent: 'center',
   },
+  isSelecetedContainer: {
+    width: 300,
+    height: 300,
+    borderRadius: 15,
+    marginRight: 10,
+    marginBottom: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+  },
   contentContainer: {
     borderRadius: 15,
   },
   image: {
     width: 25,
     height: 25,
+  },
+  isSelectedImage: {
+    width: 50,
+    height: 50,
   },
   overlay: {
     position: 'absolute',
@@ -49,5 +114,11 @@ const styles = StyleSheet.create({
     bottom: 0,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     borderRadius: 15,
+  },
+  spinner: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
   },
 });

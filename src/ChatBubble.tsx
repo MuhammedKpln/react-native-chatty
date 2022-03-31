@@ -19,9 +19,9 @@ import {
   ViewStyle,
 } from 'react-native';
 import { PropsContext } from './Chatty';
+import { PhotoView } from './components/PhotoView';
 import { ReplyingTo } from './components/ReplyingTo';
 import { UrlPreviewBubble } from './components/UrlPreviewBubble';
-import { Video } from './components/Video';
 import { VideoThumbnail } from './components/VideoThumbnail';
 import {
   IChatBubble,
@@ -41,8 +41,6 @@ import {
   MENTION_PATTERN_SHAPE,
   URL_PATTERN_SHAPE,
 } from './utils/patterns';
-import { PhotoView } from './utils/photoView';
-import { renderVideo } from './utils/videoRenderer';
 import { ContextMenuWrapper } from './wrappers/ContextMenuWrapper';
 
 const ParsedText = loadParsedText();
@@ -308,7 +306,11 @@ function _ChatBubble(props: IChatBubble) {
         if (media.type === MediaType.Video) {
           photoViewCompatible.push({
             type: 'view',
-            children: <Video media={media} />,
+            children: <VideoThumbnail media={media} isSelected />,
+          });
+          photoViewCompatible.push({
+            type: 'view',
+            children: <VideoThumbnail media={media} isSelected />,
           });
         }
       });
@@ -354,10 +356,9 @@ function _ChatBubble(props: IChatBubble) {
             </TouchableOpacity>
           )}
 
-          {PhotoView && (
+          {showMedia && (
             <PhotoView
               views={photoViewCompatible}
-              imageIndex={0}
               visible={showMedia}
               onRequestClose={() => setShowMedia(false)}
             />
