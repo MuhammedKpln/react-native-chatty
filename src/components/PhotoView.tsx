@@ -19,11 +19,18 @@ export const PhotoView = (props: IProps) => {
     onRequestClose();
   }, [onRequestClose]);
 
+  const _onImageIndexChange = useCallback(() => {
+    if (videoRef.current) {
+      videoRef.current?.unloadAsync();
+    }
+  }, []);
+
   if (_PhotoView) {
     return (
       <_PhotoView
         {...props}
         onRequestClose={_onRequestClose}
+        onImageIndexChange={_onImageIndexChange}
         swipeToCloseEnabled
       />
     );
