@@ -37,6 +37,20 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      algolia: {
+        // If Algolia did not provide you any appId, use 'BH4D9OD16A'
+        appId: 'T29VG53S5H',
+        // Public API key: it is safe to commit it
+        apiKey: '2405410935faf3f7821173d0aa500267',
+        indexName: 'react-native-chatty',
+        // Optional: see doc section below
+        contextualSearch: true,
+        // Optional: Specify domains where the navigation should occur through window.location instead on history.push. Useful when our Algolia config crawls multiple documentation sites and we want to navigate with window.location.href to them.
+        // externalUrlRegex: 'external\\.com|domain\\.com',
+        // Optional: Algolia search parameters
+        // searchParameters: {}
+        //... other Algolia params
+      },
       navbar: {
         title: 'React Native Chatty',
         logo: {
