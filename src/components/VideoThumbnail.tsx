@@ -16,14 +16,14 @@ interface IProps {
   isSelected?: boolean;
 }
 
-export function VideoThumbnail({ media, isSelected }: IProps) {
+function _VideoThumbnail({ media, isSelected }: IProps) {
   const [showVideo, setShowVideo] = useState<boolean>(false);
   const [showThumbnail, setShowThumbnail] = useState(false);
   const playIcon = useMemo(() => require('../assets/icons/play.png'), []);
 
   useEffect(() => {
     return () => {
-      setShowVideo(false);
+      console.log('VideoThumbnail unmount');
     };
   }, []);
 
@@ -48,9 +48,11 @@ export function VideoThumbnail({ media, isSelected }: IProps) {
   }
 
   if (!showThumbnail) {
-    <View style={styles.spinner}>
-      <ActivityIndicator size="small" />
-    </View>;
+    return (
+      <View style={styles.spinner}>
+        <ActivityIndicator size="small" />
+      </View>
+    );
   }
 
   return (
@@ -122,3 +124,5 @@ const styles = StyleSheet.create({
     alignContent: 'center',
   },
 });
+
+export const VideoThumbnail = React.memo(_VideoThumbnail);

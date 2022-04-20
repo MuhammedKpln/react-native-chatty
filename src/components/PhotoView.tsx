@@ -1,5 +1,5 @@
 import type { ViewSource } from '@muhammedkpln/react-native-image-viewing/dist/ImageViewing';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { videoRef } from '../utils/videoRenderer';
 import { PhotoView as _PhotoView } from '../utils/photoView';
 
@@ -12,16 +12,25 @@ interface IProps {
 export const PhotoView = (props: IProps) => {
   const { onRequestClose } = props;
 
+  useEffect(() => {
+    return () => {
+      console.log('PhotoView unmount');
+    };
+  });
+
   const _onRequestClose = useCallback(() => {
     if (videoRef.current) {
-      videoRef.current?.unloadAsync();
+      //@ts-ignore
+      // videoRef.current.stop();
+      console.log(videoRef.current); // videoRef.current?.unloadAsync();
     }
     onRequestClose();
   }, [onRequestClose]);
 
   const _onImageIndexChange = useCallback(() => {
     if (videoRef.current) {
-      videoRef.current?.unloadAsync();
+      console.log(videoRef.current);
+      // videoRef.current?.unloadAsync();
     }
   }, []);
 

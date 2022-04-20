@@ -1,5 +1,6 @@
 import type { ViewSource } from '@muhammedkpln/react-native-image-viewing/dist/ImageViewing';
 import dayjs from 'dayjs';
+import { Video } from 'expo-av';
 import React, {
   useCallback,
   useContext,
@@ -8,10 +9,12 @@ import React, {
   useState,
 } from 'react';
 import {
+  Button,
   Dimensions,
   Image,
   ImageBackground,
   InteractionManager,
+  Modal,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -19,7 +22,6 @@ import {
   ViewStyle,
 } from 'react-native';
 import { PropsContext } from './Chatty';
-import { PhotoView } from './components/PhotoView';
 import { ReplyingTo } from './components/ReplyingTo';
 import { UrlPreviewBubble } from './components/UrlPreviewBubble';
 import { VideoThumbnail } from './components/VideoThumbnail';
@@ -185,7 +187,7 @@ function _ChatBubble(props: IChatBubble) {
     propsContext?.patternProps?.customPatterns,
   ]);
 
-  const renderTicks = useCallback(() => {
+  const renderTicks = useMemo(() => {
     if (message?.status) {
       switch (message.status) {
         case MessageStatus.Sending:
@@ -223,7 +225,7 @@ function _ChatBubble(props: IChatBubble) {
     propsContext.bubbleProps?.tickProps?.sentElement,
   ]);
 
-  const renderFooter = useCallback(() => {
+  const renderFooter = useMemo(() => {
     return (
       <View style={styles.bubbleFooter}>
         <Text
@@ -235,7 +237,7 @@ function _ChatBubble(props: IChatBubble) {
         >
           {createdAt}
         </Text>
-        {renderTicks()}
+        {renderTicks}
       </View>
     );
   }, [
@@ -245,7 +247,7 @@ function _ChatBubble(props: IChatBubble) {
     renderTicks,
   ]);
 
-  const renderCornerRounding = useCallback(() => {
+  const renderCornerRounding = useMemo(() => {
     if (propsContext.bubbleProps?.enableCornerRounding === false) return null;
 
     if (message?.me) {
@@ -288,31 +290,43 @@ function _ChatBubble(props: IChatBubble) {
     propsContext.listProps?.containerStyle?.backgroundColor,
   ]);
 
-  const renderMedia = useCallback(() => {
+  const renderMedia = useMemo(() => {
     if (message?.media) {
       const photoViewCompatible: ViewSource[] = [];
+      console.log('render', showMedia, photoViewCompatible);
 
-      message.media.forEach((media) => {
-        if (media.type === MediaType.Image) {
-          photoViewCompatible.push({
-            type: 'image',
-            source: {
-              uri: media.uri,
-            },
-          });
-        }
+      if (showMedia) {
+        message.media.forEach((media) => {
+          if (media.type === MediaType.Image) {
+            photoViewCompatible.push({
+              type: 'image',
+              source: {
+                uri: media.uri,
+              },
+            });
+          }
 
-        if (media.type === MediaType.Video) {
-          photoViewCompatible.push({
-            type: 'view',
-            children: <VideoThumbnail media={media} isSelected />,
-          });
-          photoViewCompatible.push({
-            type: 'view',
-            children: <VideoThumbnail media={media} isSelected />,
-          });
-        }
-      });
+          if (media.type === MediaType.Video) {
+            console.log('ok');
+            photoViewCompatible.push({
+              type: 'view',
+              children: (
+                <Video
+                  source={{
+                    uri: media.uri,
+                  }}
+                  useNativeControls
+                  shouldPlay
+                  style={{
+                    width: 200,
+                    height: 200,
+                  }}
+                />
+              ),
+            });
+          }
+        });
+      }
 
       return (
         <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
@@ -356,11 +370,20 @@ function _ChatBubble(props: IChatBubble) {
           )}
 
           {showMedia && (
-            <PhotoView
-              views={photoViewCompatible}
-              visible={showMedia}
-              onRequestClose={() => setShowMedia(false)}
-            />
+            <Modal visible animationType="fade">
+              <Video
+                source={{
+                  uri: 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+                }}
+                useNativeControls
+                shouldPlay
+                style={{
+                  width: 200,
+                  height: 200,
+                }}
+              />
+              <Button title="close" onPress={() => setShowMedia(false)} />
+            </Modal>
           )}
         </View>
       );
@@ -424,7 +447,7 @@ function _ChatBubble(props: IChatBubble) {
 
               {propsContext?.enablePatterns && ParsedText ? (
                 <>
-                  {renderMedia()}
+                  {renderMedia}
 
                   <ParsedText
                     parse={messagePatterns}
@@ -436,11 +459,11 @@ function _ChatBubble(props: IChatBubble) {
                     {message?.text}
                   </ParsedText>
                   {renderUrlPreview}
-                  {renderFooter()}
+                  {renderFooter}
                 </>
               ) : (
                 <View>
-                  {renderMedia()}
+                  {renderMedia}
 
                   <Text
                     style={
@@ -451,12 +474,12 @@ function _ChatBubble(props: IChatBubble) {
                     {message?.text}
                   </Text>
                   {renderUrlPreview}
-                  {renderFooter()}
+                  {renderFooter}
                 </View>
               )}
             </>
           )}
-          {renderCornerRounding()}
+          {renderCornerRounding}
         </View>
       </ContextMenuWrapper>
 

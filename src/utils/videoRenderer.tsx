@@ -13,7 +13,7 @@ try {
     videoRenderer = require('react-native-video');
   } catch {
     console.warn(
-      'expo-image-picker or react-native-image-picker not found. Please install it to use this feature.'
+      'expo-av or react-native-video not found, video will not be rendered.'
     );
   }
 }
@@ -27,7 +27,7 @@ export const RenderVideo = React.forwardRef((props: VideoProperties, _ref) => {
 });
 
 export const RenderVideoExpo = React.forwardRef((props: VideoProps, _ref) => {
-  if (videoRenderer) {
+  if (videoRendererExpo) {
     return <videoRendererExpo.Video {...props} ref={videoRef} />;
   }
 
