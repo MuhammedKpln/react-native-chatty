@@ -41,7 +41,6 @@ export interface IChatty {
   enablePatterns?: boolean;
   enableUrlPreviews?: boolean;
   patternProps?: IPatternProps;
-  enableSkeletonLoader?: boolean;
   onReply?: (message: IMessage) => void;
   renderFooter?: (props?: IFooterProps) => JSX.Element;
   renderHeader?: (props?: IChatHeaderProps) => JSX.Element;

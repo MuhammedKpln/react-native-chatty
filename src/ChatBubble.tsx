@@ -32,7 +32,6 @@ import {
 } from './types/Chatty.types';
 import { ChatEmitter } from './utils/eventEmitter';
 import { extractUrlFromString, fetchMetaData } from './utils/helpers';
-import { Skeleton } from './utils/moti';
 import {
   ALL_PATERNS_SHAPES,
   HASHTAG_PATTERN_SHAPE,
@@ -321,10 +320,10 @@ function _ChatBubble(props: IChatBubble) {
             if (index < 3) {
               return (
                 <TouchableOpacity onPress={() => setShowMedia(true)}>
-                  {media.type === MediaType.Image && (
-                    <Skeleton show={!mediaLoaded}>
+                  {media.type === MediaType.Image && mediaLoaded && (
+                    <View>
                       <Image source={{ uri: media.uri }} style={styles.media} />
-                    </Skeleton>
+                    </View>
                   )}
                   {media.type === MediaType.Video && (
                     <VideoThumbnail media={media} />
