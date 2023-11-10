@@ -3,7 +3,7 @@ import { Platform } from 'react-native';
 let contextMenuView: any;
 
 try {
-  if (Platform.OS === 'ios' && Platform.Version >= 13) {
+  if (Platform.OS === 'ios' && parseInt(Platform.Version, 10) >= 13) {
     contextMenuView = require('react-native-context-menu-view');
   } else if (Platform.OS === 'android') {
     contextMenuView = require('react-native-context-menu-view');

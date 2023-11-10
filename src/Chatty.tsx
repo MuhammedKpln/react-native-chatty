@@ -8,8 +8,13 @@ import {
   Platform,
   StyleSheet,
   View,
+  useColorScheme,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { HoldMenuProvider } from 'react-native-hold-menu';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 import { Footer } from './Footer';
 import { Header } from './Header';
 import { List } from './List';
@@ -19,6 +24,8 @@ export const PropsContext = React.createContext<IChatty>({} as IChatty);
 
 export const Chatty = React.forwardRef(
   (props: IChatty, ref: ForwardedRef<ListRef>) => {
+    const colorScheme = useColorScheme();
+    const safeAreaInsets = useSafeAreaInsets();
     const listRef = useRef<ListRef>();
     const { messages } = props;
 
@@ -57,44 +64,49 @@ export const Chatty = React.forwardRef(
     return (
       <SafeAreaView>
         <PropsContext.Provider value={props}>
-          {props?.renderHeader ? (
-            props.renderHeader(props.headerProps)
-          ) : (
-            <Header {...props.headerProps} />
-          )}
-          <KeyboardAvoidingView
-            behavior={Platform.select({
-              android: 'position',
-              ios: 'position',
-            })}
-            keyboardVerticalOffset={Platform.select({
-              android: 20,
-            })}
+          <HoldMenuProvider
+            theme={colorScheme as 'light' | 'dark'}
+            safeAreaInsets={safeAreaInsets}
           >
-            {props.messages.length < 1 ? (
-              renderLoading()
+            {props?.renderHeader ? (
+              props.renderHeader(props.headerProps)
             ) : (
-              <>
-                <List
-                  data={messages}
-                  //@ts-ignore
-                  ref={ref ?? listRef}
-                  rowRenderer={
-                    props?.renderBubble ? props.renderBubble : undefined
-                  }
-                  {...props.listProps}
-                />
-                {props?.renderFooter ? (
-                  props.renderFooter(props.footerProps)
-                ) : (
-                  <Footer
-                    {...props.footerProps}
-                    replyingTo={props.replyingTo}
-                  />
-                )}
-              </>
+              <Header {...props.headerProps} />
             )}
-          </KeyboardAvoidingView>
+            <KeyboardAvoidingView
+              behavior={Platform.select({
+                android: 'position',
+                ios: 'position',
+              })}
+              keyboardVerticalOffset={Platform.select({
+                android: 20,
+              })}
+            >
+              {props.messages.length < 1 ? (
+                renderLoading()
+              ) : (
+                <>
+                  <List
+                    data={messages}
+                    //@ts-ignore
+                    ref={ref ?? listRef}
+                    rowRenderer={
+                      props?.renderBubble ? props.renderBubble : undefined
+                    }
+                    {...props.listProps}
+                  />
+                  {props?.renderFooter ? (
+                    props.renderFooter(props.footerProps)
+                  ) : (
+                    <Footer
+                      {...props.footerProps}
+                      replyingTo={props.replyingTo}
+                    />
+                  )}
+                </>
+              )}
+            </KeyboardAvoidingView>
+          </HoldMenuProvider>
         </PropsContext.Provider>
       </SafeAreaView>
     );

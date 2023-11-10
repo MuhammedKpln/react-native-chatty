@@ -1,10 +1,9 @@
 import dayjs from 'dayjs';
 import * as React from 'react';
 import { useRef } from 'react';
-import { View } from 'react-native';
-import { Button, Image, Text } from 'react-native';
+import { Button, Image, Text, View } from 'react-native';
 //@ts-ignore
-import { Chatty, ChatEmitter } from 'react-native-chatty';
+import { ChatEmitter, Chatty } from 'react-native-chatty';
 //@ts-ignore
 import type { IMessage } from 'react-native-chatty/lib/typescript/src/types/Chatty.types';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -223,7 +222,7 @@ export default function App() {
           closeReplyButton={(props) => (
             <Button
               title="ok"
-              onPress={() => props?.onPressCancelReply() ?? null}
+              onPress={() => props?.onPressCancelReply?.call() ?? null}
             />
           )}
           bubbleProps={{

@@ -9,7 +9,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Platform, ScrollView, useWindowDimensions, View } from 'react-native';
+import { Platform, ScrollView, View, useWindowDimensions } from 'react-native';
 import Animated, { FadeInDown, FadeOutUp } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
@@ -20,13 +20,13 @@ import {
 import type { ScrollEvent } from 'recyclerlistview/dist/reactnative/core/scrollcomponent/BaseScrollView';
 import { ChatBubble } from './ChatBubble';
 import { PropsContext } from './Chatty';
+import { SwipeableBubble } from './SwipeableBubble';
 import { FAB, IFabRef } from './components/FAB';
 import { LoadEarlier } from './components/LoadEarlier';
 import { RenderDate } from './components/RenderDate';
 import { TypingStatus } from './components/TypingStatus';
 import { useHaptic } from './hooks/useHaptic';
 import { usePrevious } from './hooks/usePrevious';
-import { SwipeableBubble } from './SwipeableBubble';
 import {
   HapticType,
   IListProps,
@@ -36,7 +36,6 @@ import {
   ListRef,
 } from './types/Chatty.types';
 import { ChatBubbleEmitter } from './utils/eventEmitter';
-import { hapticEngine } from './utils/hapticEngine';
 import { wait } from './utils/helpers';
 
 const ScrollViewWithHeader = React.forwardRef(
@@ -146,8 +145,9 @@ to the replied message. */
 
           if (!Array.isArray(message)) {
             if (!message.me && propsContext?.enableHapticFeedback) {
-              if (Platform.OS !== 'web' && hapticEngine)
+              if (Platform.OS !== 'web') {
                 trigger(HapticType.Heavy);
+              }
             }
           }
         },

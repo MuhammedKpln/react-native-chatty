@@ -1,29 +1,14 @@
-let imagePicker: any;
-
-try {
-  imagePicker = require('expo-image-picker');
-} catch {
-  try {
-    imagePicker = require('react-native-image-picker');
-  } catch {
-    console.warn(
-      'expo-image-picker or react-native-image-picker not found. Please install it to use this feature.'
-    );
-  }
-}
+import * as ImagePicker from 'expo-image-picker';
 
 /**
  * It launches the native image picker
- * @returns The image data is being returned as a base64 string.
  */
-export async function selectImage() {
-  if (imagePicker?.launchImageLibraryAsync) {
-    return await imagePicker.launchImageLibraryAsync({
+export async function selectImage(): Promise<ImagePicker.ImagePickerResult> {
+  try {
+    return await ImagePicker.launchImageLibraryAsync({
       base64: true,
     });
+  } catch {
+    throw new Error('expo-image-picker is not installed');
   }
-
-  return await imagePicker.launchImageLibrary({
-    includeBase64: true,
-  });
 }

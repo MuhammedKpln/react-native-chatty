@@ -1,8 +1,7 @@
-import React, { useContext } from 'react';
-import { useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { ActionSheetIOS, Platform, TouchableOpacity } from 'react-native';
-import type { IMessage } from '../types/Chatty.types';
 import { PropsContext } from '../Chatty';
+import type { IMessage } from '../types/Chatty.types';
 import { contextMenuView } from '../utils/contextMenu';
 import { ChatEmitter } from '../utils/eventEmitter';
 
@@ -58,7 +57,7 @@ function ContextMenuWrapper(props: IProps) {
     );
   }
 
-  if (Platform.OS === 'ios' && Platform.Version >= 13) {
+  if (Platform.OS === 'ios' && parseInt(Platform.Version, 10) >= 13) {
     return (
       <contextMenuView.default
         actions={propsContext.bubbleProps?.actions?.options}
