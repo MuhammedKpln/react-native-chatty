@@ -24,7 +24,7 @@
     "react-native": "0.72.6",
     "react-native-chatty": "../",
     "react-native-gesture-handler": "~2.12.0",
-    "react-native-hold-menu": "^0.1.6",
+    "@gorhom/bottom-sheet": "^4.5.1",
     "react-native-reanimated": "~3.3.0",
     "react-native-safe-area-context": "4.6.3",
     "react-native-web": "0.19.9",

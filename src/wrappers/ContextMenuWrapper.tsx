@@ -1,5 +1,6 @@
-import React, { useCallback, useContext } from 'react';
-import { ActionSheetIOS, Platform, TouchableOpacity } from 'react-native';
+import BottomSheet from '@gorhom/bottom-sheet';
+import React, { useCallback, useContext, useMemo, useRef } from 'react';
+import { ActionSheetIOS, Platform, Text, View } from 'react-native';
 import { PropsContext } from '../Chatty';
 import type { IMessage } from '../types/Chatty.types';
 import { contextMenuView } from '../utils/contextMenu';
@@ -11,6 +12,8 @@ interface IProps {
 }
 
 function ContextMenuWrapper(props: IProps) {
+  const snapPoints = useMemo(() => ['25%', '50%'], []);
+  const bottomSheetRef = useRef<BottomSheet>(null);
   const propsContext = useContext(PropsContext);
 
   const onPress = useCallback(
@@ -45,17 +48,10 @@ function ContextMenuWrapper(props: IProps) {
     propsContext.bubbleProps?.actions?.options,
   ]);
 
+  const onChange = useCallback(() => {}, []);
+
   // If actions are not defined, just return the children
   if (!propsContext.bubbleProps?.actions) return props.children;
-
-  // If actions are defined, but ios version is not supported, return the actionsheet
-  if (!contextMenuView) {
-    return (
-      <TouchableOpacity onLongPress={onLongPress}>
-        {props.children}
-      </TouchableOpacity>
-    );
-  }
 
   if (Platform.OS === 'ios' && parseInt(Platform.Version, 10) >= 13) {
     return (
@@ -68,12 +64,16 @@ function ContextMenuWrapper(props: IProps) {
     );
   }
   return (
-    <contextMenuView.default
-      actions={propsContext.bubbleProps?.actions?.options}
-      onPress={(e: any) => onPress(e.nativeEvent.index)}
+    <BottomSheet
+      ref={bottomSheetRef}
+      index={1}
+      snapPoints={snapPoints}
+      onChange={onChange}
     >
-      {props.children}
-    </contextMenuView.default>
+      <View>
+        <Text>Awesome 🎉</Text>
+      </View>
+    </BottomSheet>
   );
 }
 
